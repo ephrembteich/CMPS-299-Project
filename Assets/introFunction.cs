@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System;
+using UnityEngine.SceneManagement;
 
 public class introFunction : MonoBehaviour {
 
@@ -33,6 +34,6 @@ public class introFunction : MonoBehaviour {
 	}
 
 	public void next(){
-		Application.LoadLevel("randomLevel");
+		SceneManager.LoadScene("randomLevel");
 	}
 }
