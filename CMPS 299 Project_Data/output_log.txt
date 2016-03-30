@@ -6,61 +6,45 @@ Direct3D:
     Vendor:   Intel
     VRAM:     128 MB
 Begin MonoManager ReloadAssembly
-Platform assembly: F:\CMPS 299 Project\CMPS 299 Project_Data\Managed\UnityEngine.dll (this message is harmless)
-Loading F:\CMPS 299 Project\CMPS 299 Project_Data\Managed\UnityEngine.dll into Unity Child Domain
-Platform assembly: F:\CMPS 299 Project\CMPS 299 Project_Data\Managed\Assembly-CSharp.dll (this message is harmless)
-Loading F:\CMPS 299 Project\CMPS 299 Project_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
-Platform assembly: F:\CMPS 299 Project\CMPS 299 Project_Data\Managed\UnityEngine.UI.dll (this message is harmless)
-Loading F:\CMPS 299 Project\CMPS 299 Project_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
-Platform assembly: F:\CMPS 299 Project\CMPS 299 Project_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
-Loading F:\CMPS 299 Project\CMPS 299 Project_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.302 seconds
-Platform assembly: F:\CMPS 299 Project\CMPS 299 Project_Data\Managed\System.Core.dll (this message is harmless)
-Platform assembly: F:\CMPS 299 Project\CMPS 299 Project_Data\Managed\System.dll (this message is harmless)
+Platform assembly: C:\Users\Public\Documents\Unity Projects\CMPS 299 Project\CMPS 299 Project_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Users\Public\Documents\Unity Projects\CMPS 299 Project\CMPS 299 Project_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Users\Public\Documents\Unity Projects\CMPS 299 Project\CMPS 299 Project_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Users\Public\Documents\Unity Projects\CMPS 299 Project\CMPS 299 Project_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Users\Public\Documents\Unity Projects\CMPS 299 Project\CMPS 299 Project_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\Users\Public\Documents\Unity Projects\CMPS 299 Project\CMPS 299 Project_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: C:\Users\Public\Documents\Unity Projects\CMPS 299 Project\CMPS 299 Project_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading C:\Users\Public\Documents\Unity Projects\CMPS 299 Project\CMPS 299 Project_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+- Completed reload, in  0.251 seconds
+Platform assembly: C:\Users\Public\Documents\Unity Projects\CMPS 299 Project\CMPS 299 Project_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: C:\Users\Public\Documents\Unity Projects\CMPS 299 Project\CMPS 299 Project_Data\Managed\System.dll (this message is harmless)
 desktop: 1366x768 50Hz; virtual: 1366x768 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 2.528046 ms
-Scene 'scenariosLevel' (-1) couldn't be loaded because it has not been added to the build settings or the AssetBundle has not been loaded.
-To add a scene to the build settings use the menu File->Build Settings...
- 
-(Filename:  Line: 504)
+UnloadTime: 0.684351 ms
+Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 4.870104 ms
 
-Scene 'scenariosLevel' (-1) couldn't be loaded because it has not been added to the build settings or the AssetBundle has not been loaded.
-To add a scene to the build settings use the menu File->Build Settings...
- 
-(Filename:  Line: 504)
+Unloading 29 unused Assets to reduce memory usage. Loaded Objects now: 227.
+Total: 0.269306 ms (FindLiveObjects: 0.018473 ms CreateObjectMapping: 0.013136 ms MarkObjects: 0.211422 ms  DeleteObjects: 0.025452 ms)
 
-Scene 'scenariosLevel' (-1) couldn't be loaded because it has not been added to the build settings or the AssetBundle has not been loaded.
-To add a scene to the build settings use the menu File->Build Settings...
- 
-(Filename:  Line: 504)
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.637140 ms
 
-Scene 'scenariosLevel' (-1) couldn't be loaded because it has not been added to the build settings or the AssetBundle has not been loaded.
-To add a scene to the build settings use the menu File->Build Settings...
- 
-(Filename:  Line: 504)
+Unloading 15 unused Assets to reduce memory usage. Loaded Objects now: 259.
+Total: 0.275875 ms (FindLiveObjects: 0.029147 ms CreateObjectMapping: 0.011494 ms MarkObjects: 0.220454 ms  DeleteObjects: 0.014368 ms)
 
-Scene 'scenariosLevel' (-1) couldn't be loaded because it has not been added to the build settings or the AssetBundle has not been loaded.
-To add a scene to the build settings use the menu File->Build Settings...
- 
-(Filename:  Line: 504)
+Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.640014 ms
 
-Scene 'scenariosLevel' (-1) couldn't be loaded because it has not been added to the build settings or the AssetBundle has not been loaded.
-To add a scene to the build settings use the menu File->Build Settings...
- 
-(Filename:  Line: 504)
+Unloading 11 unused Assets to reduce memory usage. Loaded Objects now: 259.
+Total: 0.304612 ms (FindLiveObjects: 0.034073 ms CreateObjectMapping: 0.022579 ms MarkObjects: 0.231538 ms  DeleteObjects: 0.015600 ms)
 
-Scene 'scenariosLevel' (-1) couldn't be loaded because it has not been added to the build settings or the AssetBundle has not been loaded.
-To add a scene to the build settings use the menu File->Build Settings...
- 
-(Filename:  Line: 504)
+Unloading 2 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.711446 ms
 
-Scene 'scenariosLevel' (-1) couldn't be loaded because it has not been added to the build settings or the AssetBundle has not been loaded.
-To add a scene to the build settings use the menu File->Build Settings...
- 
-(Filename:  Line: 504)
+Unloading 17 unused Assets to reduce memory usage. Loaded Objects now: 164.
+Total: 0.293117 ms (FindLiveObjects: 0.026684 ms CreateObjectMapping: 0.022168 ms MarkObjects: 0.222096 ms  DeleteObjects: 0.020936 ms)
 
 Setting up 1 worker threads for Enlighten.
-  Thread -> id: 1b34 -> priority: 1 
+  Thread -> id: 1744 -> priority: 1 

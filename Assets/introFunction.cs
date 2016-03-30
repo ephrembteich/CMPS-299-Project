@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System;
 using UnityEngine.SceneManagement;
+using System;
 
 public class introFunction : MonoBehaviour {
 
@@ -34,6 +34,6 @@ public class introFunction : MonoBehaviour {
 	}
 
 	public void next(){
-		SceneManager.LoadScene("randomLevel");
+		SceneManager.LoadScene("scenario1");
 	}
 }
