@@ -14,37 +14,37 @@ Platform assembly: C:\Users\Public\Documents\Unity Projects\CMPS 299 Project\CMP
 Loading C:\Users\Public\Documents\Unity Projects\CMPS 299 Project\CMPS 299 Project_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
 Platform assembly: C:\Users\Public\Documents\Unity Projects\CMPS 299 Project\CMPS 299 Project_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
 Loading C:\Users\Public\Documents\Unity Projects\CMPS 299 Project\CMPS 299 Project_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.251 seconds
+- Completed reload, in  0.151 seconds
 Platform assembly: C:\Users\Public\Documents\Unity Projects\CMPS 299 Project\CMPS 299 Project_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: C:\Users\Public\Documents\Unity Projects\CMPS 299 Project\CMPS 299 Project_Data\Managed\System.dll (this message is harmless)
 desktop: 1366x768 50Hz; virtual: 1366x768 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 0.684351 ms
+UnloadTime: 56.242462 ms
 Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 4.870104 ms
+UnloadTime: 5.211664 ms
 
 Unloading 29 unused Assets to reduce memory usage. Loaded Objects now: 227.
-Total: 0.269306 ms (FindLiveObjects: 0.018473 ms CreateObjectMapping: 0.013136 ms MarkObjects: 0.211422 ms  DeleteObjects: 0.025452 ms)
+Total: 0.240980 ms (FindLiveObjects: 0.014779 ms CreateObjectMapping: 0.011905 ms MarkObjects: 0.194590 ms  DeleteObjects: 0.019294 ms)
 
 Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 0.637140 ms
+UnloadTime: 0.606761 ms
 
 Unloading 15 unused Assets to reduce memory usage. Loaded Objects now: 259.
-Total: 0.275875 ms (FindLiveObjects: 0.029147 ms CreateObjectMapping: 0.011494 ms MarkObjects: 0.220454 ms  DeleteObjects: 0.014368 ms)
+Total: 0.278749 ms (FindLiveObjects: 0.028326 ms CreateObjectMapping: 0.014368 ms MarkObjects: 0.218811 ms  DeleteObjects: 0.016421 ms)
 
 Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
 UnloadTime: 0.640014 ms
 
 Unloading 11 unused Assets to reduce memory usage. Loaded Objects now: 259.
-Total: 0.304612 ms (FindLiveObjects: 0.034073 ms CreateObjectMapping: 0.022579 ms MarkObjects: 0.231538 ms  DeleteObjects: 0.015600 ms)
+Total: 0.313644 ms (FindLiveObjects: 0.046389 ms CreateObjectMapping: 0.027094 ms MarkObjects: 0.224148 ms  DeleteObjects: 0.014779 ms)
 
 Unloading 2 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 0.711446 ms
+UnloadTime: 0.628519 ms
 
 Unloading 17 unused Assets to reduce memory usage. Loaded Objects now: 164.
-Total: 0.293117 ms (FindLiveObjects: 0.026684 ms CreateObjectMapping: 0.022168 ms MarkObjects: 0.222096 ms  DeleteObjects: 0.020936 ms)
+Total: 0.204853 ms (FindLiveObjects: 0.010263 ms CreateObjectMapping: 0.010673 ms MarkObjects: 0.165443 ms  DeleteObjects: 0.017652 ms)
 
 Setting up 1 worker threads for Enlighten.
-  Thread -> id: 1744 -> priority: 1 
+  Thread -> id: 249c -> priority: 1 
