@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public class scenario1 : MonoBehaviour{
+public class scenario1 : MonoBehaviour, IDrop{
 
 	public GameObject door;
 	public GameObject openDoor;
@@ -32,6 +32,7 @@ public class scenario1 : MonoBehaviour{
 	}
 
 	public void Chosen(string item){
+		InvokeRepeating ("Exit", 0, 0.6f);
 		Destroy (sandwich.GetComponent<Draggable>());
 		Destroy (croissant.GetComponent<Draggable>());
 		openDoor.SetActive (false);
@@ -41,5 +42,10 @@ public class scenario1 : MonoBehaviour{
 
 	public void next(){
 		SceneManager.LoadScene ("scenario2");
+	}
+
+	void Exit(){
+		ChoiceLeave.GetComponent<Button> ().image.canvasRenderer.SetAlpha(1);
+		ChoiceLeave.GetComponent<Button> ().image.CrossFadeAlpha (0.5f, 0.6f, false);
 	}
 }

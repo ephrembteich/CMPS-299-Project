@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public class scenario3 : MonoBehaviour {
+public class scenario3 : MonoBehaviour, IDrop {
 	public GameObject manouche;
 	public GameObject candy;
 	public GameObject lentilSoup;

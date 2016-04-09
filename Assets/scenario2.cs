@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public class scenario2 : MonoBehaviour{
+public class scenario2 : MonoBehaviour, IDrop{
 
 	public GameObject manouche;
 	public GameObject banana;

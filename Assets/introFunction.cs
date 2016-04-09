@@ -16,7 +16,7 @@ public class introFunction : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-
+		
 	}
 
 	public void setAge(int param){
