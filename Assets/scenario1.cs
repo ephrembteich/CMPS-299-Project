@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using System.Globalization;
 
 public class scenario1 : MonoBehaviour, IDrop{
 
@@ -9,13 +10,19 @@ public class scenario1 : MonoBehaviour, IDrop{
 	public GameObject openDoor;
 	public GameObject sandwich;
 	public GameObject croissant;
-	public GameObject choiceSandwich;
-	public GameObject choiceCroissant;
 	public GameObject ChoiceLeave;
+	public GameObject Text;
 
 	// Use this for initialization
 	void Start () {
 		openDoor.SetActive (false);
+		setCalendar ();
+	}
+
+	private void setCalendar(){
+		Text t = Text.GetComponent<Text> ();
+		t.text = System.DateTime.Today.Day+" "+
+			CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(System.DateTime.Today.Month);
 	}
 
 	private void OpenDoor(){
