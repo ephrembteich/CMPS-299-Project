@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using System.Globalization;
 
 public class scenario1 : MonoBehaviour, IDrop{
 
@@ -9,9 +10,8 @@ public class scenario1 : MonoBehaviour, IDrop{
 	public GameObject openDoor;
 	public GameObject sandwich;
 	public GameObject croissant;
-	public GameObject choiceSandwich;
-	public GameObject choiceCroissant;
 	public GameObject ChoiceLeave;
+	public GameObject Text;
 
 	public GameSession session;
 
@@ -31,28 +31,33 @@ public class scenario1 : MonoBehaviour, IDrop{
 		scene.Variables.Add (new Variable("Portion Size", "Same Portion Size"));
 		session.currentScene = scene;
 		//Debug.Log (session.Age +" " + session.Gender);
+		setCalendar ();
+	}
+
+	private void setCalendar(){
+		Text t = Text.GetComponent<Text> ();
+		t.text = System.DateTime.Today.Day+" "+
+			CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(System.DateTime.Today.Month);
 	}
 
 	private void OpenDoor(){
 		door.SetActive (false);
 		openDoor.SetActive (true);
-		sandwich.SetActive (true);
 	}
 
 	private void CloseDoor(){
 		openDoor.SetActive (false);
-		sandwich.SetActive (false);
 		door.SetActive (true);
 	}
 
 	public void Chosen(string item){
 		session.currentScene.SelectedFoodItem = item;
 		InvokeRepeating ("Exit", 0, 0.6f);
-		Destroy (sandwich.GetComponent<Draggable>());
-		Destroy (croissant.GetComponent<Draggable>());
-		openDoor.SetActive (false);
-		door.SetActive (true);
-		door.GetComponent<Button>().interactable = false;
+		//Destroy (sandwich.GetComponent<Draggable>());
+		//Destroy (croissant.GetComponent<Draggable>());
+		//openDoor.SetActive (false);
+		//door.SetActive (true);
+		//door.GetComponent<Button>().interactable = false;
 	}
 
 	public void next(){

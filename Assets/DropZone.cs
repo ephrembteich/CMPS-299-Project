@@ -14,7 +14,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 
 	public void OnDrop(PointerEventData eventData){
 		Draggable d = eventData.pointerDrag.GetComponent<Draggable> ();
-		if(d!=null){
+		if(d!=null && this.transform.childCount==0){
 			d.parent = this.transform;
 			d.transform.position = d.parent.transform.position;
 			GameObject go = GameObject.Find("Controller");
