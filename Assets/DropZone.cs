@@ -18,6 +18,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 			d.parent = this.transform;
 			d.transform.position = d.parent.transform.position;
 			GameObject go = GameObject.Find("Controller");
+			Debug.Log(go.scene.name);
 			IDrop script = go.GetComponent<IDrop> ();
 			script.Chosen (d.name);
 		}

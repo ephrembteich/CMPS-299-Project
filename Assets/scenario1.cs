@@ -13,9 +13,24 @@ public class scenario1 : MonoBehaviour, IDrop{
 	public GameObject ChoiceLeave;
 	public GameObject Text;
 
+	public GameSession session;
+
+	public Scene scene;
+
 	// Use this for initialization
 	void Start () {
 		openDoor.SetActive (false);
+		sandwich.SetActive (false);
+		session = GameSession.getSession();
+		scene = new Scene ("Breakfast Home");
+		scene.Place = "Kitchen";
+		scene.Time = "Morning"; 
+		scene.Variables.Add (new Variable("Convinene", "Croissent is availabe on the table. Labneh Sandwich is in the fridge"));
+		scene.Variables.Add (new Variable("Food Type", "Labneh Croissent"));
+		scene.Variables.Add (new Variable("Pressure", "Mother is not the home"));
+		scene.Variables.Add (new Variable("Portion Size", "Same Portion Size"));
+		session.currentScene = scene;
+		//Debug.Log (session.Age +" " + session.Gender);
 		setCalendar ();
 	}
 
@@ -36,6 +51,7 @@ public class scenario1 : MonoBehaviour, IDrop{
 	}
 
 	public void Chosen(string item){
+		session.currentScene.SelectedFoodItem = item;
 		InvokeRepeating ("Exit", 0, 0.6f);
 		//Destroy (sandwich.GetComponent<Draggable>());
 		//Destroy (croissant.GetComponent<Draggable>());
@@ -45,7 +61,15 @@ public class scenario1 : MonoBehaviour, IDrop{
 	}
 
 	public void next(){
+		string result = scene.GetResult();
+		session.Results.AddLast (result);
+		Save.Savecsv ();
 		SceneManager.LoadScene ("scenario2");
+	}
+
+	public void GenerateComb(){
+		//enable
+		//disable
 	}
 
 	void Exit(){
