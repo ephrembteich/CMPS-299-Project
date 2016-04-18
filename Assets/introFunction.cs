@@ -5,30 +5,30 @@ using System;
 
 public class introFunction : MonoBehaviour {
 
-	private int age = 0;
-	private string gender = null;
+
 	public GameObject nextBtn;
+	public GameSession session;
 
 	// Use this for initialization
 	void Start () {
-		
+		session = GameSession.getSession ();
 	}
 
 	// Update is called once per frame
 	void Update () {
-		
+
 	}
 
 	public void setAge(int param){
-		age = param;
-		if(gender!=null){
+		session.Age = param;
+		if(param!= 0){
 			nextBtn.GetComponentInChildren<Button> ().interactable = true;
 		}
 	}
 
 	public void setGender(string param){
-		gender = param;
-		if(age!=0){
+		session.Gender = param;
+		if(param != null){
 			nextBtn.GetComponentInChildren<Button> ().interactable = true;
 		}
 	}
