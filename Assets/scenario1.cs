@@ -12,6 +12,9 @@ public class scenario1 : MonoBehaviour, IDrop{
 	public GameObject croissant;
 	public GameObject ChoiceLeave;
 	public GameObject Text;
+	public GameObject Canvas;
+
+	private float savedTimeScale;
 
 	public GameSession session;
 
@@ -19,8 +22,7 @@ public class scenario1 : MonoBehaviour, IDrop{
 
 	// Use this for initialization
 	void Start () {
-		openDoor.SetActive (false);
-		sandwich.SetActive (false);
+		Canvas.GetComponent<AudioSource>().Play();
 		session = GameSession.getSession();
 		scene = new Scene ("Breakfast Home");
 		scene.Place = "Kitchen";
