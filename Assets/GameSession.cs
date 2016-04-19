@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using HTTP;
+
 
 public class GameSession
 {
 	public int Age { get; set; }
+
+	public CookieAccessInfo c;
 
 	public String Gender { get; set; }
 

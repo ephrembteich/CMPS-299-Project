@@ -23,6 +23,18 @@ public class scenario1 : MonoBehaviour, IDrop{
 	// Use this for initialization
 	void Start () {
 		Canvas.GetComponent<AudioSource>().Play();
+		Debug.Log("SSSS");
+		HTTP.Request someRequest = new HTTP.Request("get", "http://jsonplaceholder.typicode.com/posts");
+		someRequest.Send((request) =>
+		{
+			// parse some JSON, for example:
+			Debug.Log(request.response.Text);
+		});
+		//Save s = new Save();
+		//var ass = s.SomeRoutine();
+		//Debug.Log("EEEE" + ass);
+		openDoor.SetActive (false);
+		sandwich.SetActive (true);
 		session = GameSession.getSession();
 		scene = new Scene ("Breakfast Home");
 		scene.Place = "Kitchen";
