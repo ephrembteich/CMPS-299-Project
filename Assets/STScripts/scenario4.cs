@@ -5,16 +5,28 @@ using UnityEngine.SceneManagement;
 
 public class scenario4 : MonoBehaviour {
 
+	public GameObject door;
+	public GameObject openDoor;
 	public GameObject ChoiceLeave;
 
 	// Use this for initialization
 	void Start () {
-	
+		openDoor.SetActive (false);
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	
+	}
+
+	public void OpenDoor(){
+		door.SetActive (false);
+		openDoor.SetActive (true);
+	}
+
+	public void CloseDoor(){
+		openDoor.SetActive (false);
+		door.SetActive (true);
 	}
 
 	public void next(){

@@ -33,8 +33,6 @@ public class scenario1 : MonoBehaviour, IDrop{
 		//Save s = new Save();
 		//var ass = s.SomeRoutine();
 		//Debug.Log("EEEE" + ass);
-		openDoor.SetActive (false);
-		sandwich.SetActive (true);
 		session = GameSession.getSession();
 		scene = new Scene ("Breakfast Home");
 		scene.Place = "Kitchen";

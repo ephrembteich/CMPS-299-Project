@@ -11,8 +11,22 @@ public class transition4 : MonoBehaviour {
 	public Sprite thirdImg;
 
 	void Start(){
-		//Invoke ("getImg2", 4);
-		Invoke ("next", 1F);
+		Invoke ("getImg2", 4);
+		Invoke ("next", 7.5F);
+	}
+
+	void Update(){
+		if (Input.GetMouseButtonDown (0) || Input.GetMouseButtonDown (1) || Input.GetMouseButtonDown (2)) {
+			next ();
+		}
+	}
+
+	void update(){
+		Debug.Log ("before if");
+		if (Input.GetMouseButtonDown (0) || Input.GetMouseButtonDown (1) || Input.GetMouseButtonDown (2)) {
+			Debug.Log ("HERE");
+			next ();
+		}
 	}
 
 	void getImg2(){

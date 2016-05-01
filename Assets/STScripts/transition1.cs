@@ -14,6 +14,12 @@ public class transition1 : MonoBehaviour {
 		Invoke ("next", 7.5F);
 	}
 
+	void Update(){
+		if (Input.GetMouseButtonDown (0) || Input.GetMouseButtonDown (1) || Input.GetMouseButtonDown (2)) {
+			next ();
+		}
+	}
+
 	void getImg2(){
 		image.sprite = secondImg;
 	}
