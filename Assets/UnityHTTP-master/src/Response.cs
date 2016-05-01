@@ -1,258 +1,275 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text;
-using System.Globalization;
+using Assets.lib;
 using Ionic.Zlib;
 
-namespace HTTP
+namespace Assets.src
 {
-    public class Response
-    {
-        public Request request;
-        public int status = 200;
-        public string message = "OK";
-        public byte[] bytes;
+	public class Response
+	{
+		private readonly Dictionary<string, List<string>> _headers = new Dictionary<string, List<string>>();
+		public byte[] Bytes;
+		public string Message = "OK";
+		public Request Request;
+		public int Status = 200;
 
-        Dictionary<string, List<string>> headers = new Dictionary<string, List<string>> ();
+		public string Text
+		{
+			get
+			{
+				if (Bytes == null)
+					return "";
+				return Encoding.UTF8.GetString(Bytes);
+			}
+		}
 
-        public string Text {
-            get {
-                if (bytes == null)
-                    return "";
-                return System.Text.UTF8Encoding.UTF8.GetString (bytes);
-            }
-        }
+		public string Asset
+		{
+			get { throw new NotSupportedException("This can't be done, yet."); }
+		}
 
-        public string Asset {
-            get {
-                throw new NotSupportedException ("This can't be done, yet.");
-            }
-        }
+		public Hashtable Object
+		{
+			get
+			{
+				if (Bytes == null)
+				{
+					return null;
+				}
 
-        public Hashtable Object {
-            get {
-                if ( bytes == null )
-                {
-                    return null;
-                }
-                
-                bool result = false;
-                Hashtable obj = (Hashtable)JSON.JsonDecode( this.Text, ref result );
-                if ( !result )
-                {
-                    obj = null;
-                }
-                
-                return obj;
-            }
-        }
-        
-        public ArrayList Array {
-            get {
-                if ( bytes == null )
-                {
-                    return null;
-                }
-                
-                bool result = false;
-                ArrayList array = (ArrayList)JSON.JsonDecode( this.Text, ref result );
-                if ( !result )
-                {
-                    array = null;
-                }
-                
-                return array;
-            }
-        }
-        
-        void AddHeader (string name, string value)
-        {
-            name = name.ToLower ().Trim ();
-            value = value.Trim ();
-            if (!headers.ContainsKey (name))
-                headers[name] = new List<string> ();
-            headers[name].Add (value);
-        }
+				var result = false;
+				var obj = (Hashtable) Json.JsonDecode(Text, ref result);
+				if (!result)
+				{
+					obj = null;
+				}
 
-        public List< string > GetHeaders()
-        {
-            List< string > result = new List< string >();
-            foreach (string name in headers.Keys) {
-                foreach (string value in headers[name]) {
-                    result.Add( name + ": " + value );
-                }
-            }
+				return obj;
+			}
+		}
 
-            return result;
-        }
+		public ArrayList Array
+		{
+			get
+			{
+				if (Bytes == null)
+				{
+					return null;
+				}
 
-        public List<string> GetHeaders (string name)
-        {
-            name = name.ToLower ().Trim ();
-            if (!headers.ContainsKey (name))
-                return new List<string> ();
-            return headers[name];
-        }
+				var result = false;
+				var array = (ArrayList) Json.JsonDecode(Text, ref result);
+				if (!result)
+				{
+					array = null;
+				}
 
-        public string GetHeader (string name)
-        {
-            name = name.ToLower ().Trim ();
-            if (!headers.ContainsKey (name))
-                return string.Empty;
-            return headers[name][headers[name].Count - 1];
-        }
+				return array;
+			}
+		}
 
-        public Response ()
-        {
-            //ReadFromStream (stream);
-        }
+		private void AddHeader(string name, string value)
+		{
+			name = name.ToLower().Trim();
+			value = value.Trim();
+			if (!_headers.ContainsKey(name))
+				_headers[name] = new List<string>();
+			_headers[name].Add(value);
+		}
 
-        string ReadLine (Stream stream)
-        {
-            var line = new List<byte> ();
-            while (true) {
-                int c = stream.ReadByte ();
-                if (c == -1) {
-                    throw new HTTPException("Unterminated Stream Encountered.");
-                }
-                if ((byte)c == Request.EOL[1])
-                    break;
-                line.Add ((byte)c);
-            }
-            var s = ASCIIEncoding.ASCII.GetString (line.ToArray ()).Trim ();
-            return s;
-        }
+		public List<string> GetHeaders()
+		{
+			var result = new List<string>();
+			foreach (var name in _headers.Keys)
+			{
+				foreach (var value in _headers[name])
+				{
+					result.Add(name + ": " + value);
+				}
+			}
 
-        string[] ReadKeyValue (Stream stream)
-        {
-            string line = ReadLine (stream);
-            if (line == "")
-                return null;
-            else {
-                var split = line.IndexOf (':');
-                if (split == -1)
-                    return null;
-                var parts = new string[2];
-                parts[0] = line.Substring (0, split).Trim ();
-                parts[1] = line.Substring (split + 1).Trim ();
-                return parts;
-            }
+			return result;
+		}
 
-        }
+		public List<string> GetHeaders(string name)
+		{
+			name = name.ToLower().Trim();
+			if (!_headers.ContainsKey(name))
+				return new List<string>();
+			return _headers[name];
+		}
 
-        public void ReadFromStream( Stream inputStream )
-        {
-            //var inputStream = new BinaryReader(inputStream);
-            var top = ReadLine (inputStream).Split (new char[] { ' ' });
+		public string GetHeader(string name)
+		{
+			name = name.ToLower().Trim();
+			if (!_headers.ContainsKey(name))
+				return string.Empty;
+			return _headers[name][_headers[name].Count - 1];
+		}
 
-            if (!int.TryParse (top[1], out status))
-                throw new HTTPException ("Bad Status Code");
+		private string ReadLine(Stream stream)
+		{
+			var line = new List<byte>();
+			while (true)
+			{
+				var c = stream.ReadByte();
+				if (c == -1)
+				{
+					throw new HttpException("Unterminated Stream Encountered.");
+				}
+				if ((byte) c == Request.Eol[1])
+					break;
+				line.Add((byte) c);
+			}
+			var s = Encoding.ASCII.GetString(line.ToArray()).Trim();
+			return s;
+		}
 
-            // MemoryStream is a disposable
-            // http://stackoverflow.com/questions/234059/is-a-memory-leak-created-if-a-memorystream-in-net-is-not-closed
-            using (var output = new MemoryStream ()) {
-                message = string.Join (" ", top, 2, top.Length - 2);
-                headers.Clear ();
+		private string[] ReadKeyValue(Stream stream)
+		{
+			var line = ReadLine(stream);
+			if (line == "")
+				return null;
+			var split = line.IndexOf(':');
+			if (split == -1)
+				return null;
+			var parts = new string[2];
+			parts[0] = line.Substring(0, split).Trim();
+			parts[1] = line.Substring(split + 1).Trim();
+			return parts;
+		}
 
-                while (true) {
-                    // Collect Headers
-                    string[] parts = ReadKeyValue( inputStream );
-                    if ( parts == null )
-                        break;
-                    AddHeader( parts[ 0 ], parts[ 1 ] );
-                }
+		public void ReadFromStream(Stream inputStream)
+		{
+			//var inputStream = new BinaryReader(inputStream);
+			var top = ReadLine(inputStream).Split(' ');
 
-                if ( request.cookieJar != null )
-                {
-                    List< string > cookies = GetHeaders( "set-cookie" );
-                    for ( int cookieIndex = 0; cookieIndex < cookies.Count; ++cookieIndex )
-                    {
-                        string cookieString = cookies[ cookieIndex ];
-                        if ( cookieString.IndexOf( "domain=", StringComparison.CurrentCultureIgnoreCase ) == -1 )
-                        {
-                            cookieString += "; domain=" + request.uri.Host;
-                        }
+			if (!int.TryParse(top[1], out Status))
+				throw new HttpException("Bad Status Code");
 
-                        if ( cookieString.IndexOf( "path=", StringComparison.CurrentCultureIgnoreCase ) == -1 )
-                        {
-                            cookieString += "; path=" + request.uri.AbsolutePath;
-                        }
+			// MemoryStream is a disposable
+			// http://stackoverflow.com/questions/234059/is-a-memory-leak-created-if-a-memorystream-in-net-is-not-closed
+			using (var output = new MemoryStream())
+			{
+				Message = string.Join(" ", top, 2, top.Length - 2);
+				_headers.Clear();
 
-                        request.cookieJar.SetCookie( new Cookie( cookieString ) );
-                    }
-                }
+				while (true)
+				{
+					// Collect Headers
+					var parts = ReadKeyValue(inputStream);
+					if (parts == null)
+						break;
+					AddHeader(parts[0], parts[1]);
+				}
 
-                if ( GetHeader( "transfer-encoding" ) == "chunked" ) {
-                    while (true) {
-                        // Collect Body
-                        int length = int.Parse( ReadLine( inputStream ), NumberStyles.AllowHexSpecifier );
+				if (Request.CookieJar != null)
+				{
+					var cookies = GetHeaders("set-cookie");
+					for (var cookieIndex = 0; cookieIndex < cookies.Count; ++cookieIndex)
+					{
+						var cookieString = cookies[cookieIndex];
+						if (cookieString.IndexOf("domain=", StringComparison.CurrentCultureIgnoreCase) == -1)
+						{
+							cookieString += "; domain=" + Request.Uri.Host;
+						}
 
-                        if ( length == 0 ) {
-                            break;
-                        }
-                        
-                        for (int i = 0; i < length; i++) {
-                            output.WriteByte( (byte)inputStream.ReadByte() );
-                        }
+						if (cookieString.IndexOf("path=", StringComparison.CurrentCultureIgnoreCase) == -1)
+						{
+							cookieString += "; path=" + Request.Uri.AbsolutePath;
+						}
 
-                        //forget the CRLF.
-                        inputStream.ReadByte();
-                        inputStream.ReadByte();
-                    }
+						Request.CookieJar.SetCookie(new Cookie(cookieString));
+					}
+				}
 
-                    while (true) {
-                        //Collect Trailers
-                        string[] parts = ReadKeyValue( inputStream );
-                        if ( parts == null )
-                            break;
-                        AddHeader( parts[0], parts[1] );
-                    }
-                    
-                } else {
-                    // Read Body
-                    int contentLength = 0;
+				if (GetHeader("transfer-encoding") == "chunked")
+				{
+					while (true)
+					{
+						// Collect Body
+						var length = int.Parse(ReadLine(inputStream), NumberStyles.AllowHexSpecifier);
 
-                    try {
-                        contentLength = int.Parse( GetHeader("content-length") );
-                    } catch {
-                        contentLength = 0;
-                    }
+						if (length == 0)
+						{
+							break;
+						}
 
-                    int _b;
-                    while( ( contentLength == 0 || output.Length < contentLength )
-                              && (_b = inputStream.ReadByte()) != -1 ) {
-                        output.WriteByte((byte)_b);
-                    }
+						for (var i = 0; i < length; i++)
+						{
+							output.WriteByte((byte) inputStream.ReadByte());
+						}
 
-                    if( contentLength > 0 && output.Length != contentLength ) {
-                        throw new HTTPException ("Response length does not match content length");
-                    }
-                }
+						//forget the CRLF.
+						inputStream.ReadByte();
+						inputStream.ReadByte();
+					}
 
-                if ( GetHeader( "content-encoding" ).Contains( "gzip" ) ) {
-                    bytes = UnZip( output );
-                }
-                else {
-                    bytes = output.ToArray();
-                }
-            }
-        }
+					while (true)
+					{
+						//Collect Trailers
+						var parts = ReadKeyValue(inputStream);
+						if (parts == null)
+							break;
+						AddHeader(parts[0], parts[1]);
+					}
+				}
+				else
+				{
+					// Read Body
+					var contentLength = 0;
 
+					try
+					{
+						contentLength = int.Parse(GetHeader("content-length"));
+					}
+					catch
+					{
+						contentLength = 0;
+					}
 
-        byte[] UnZip(MemoryStream output) {
-            var cms = new MemoryStream ();
-            output.Seek(0, SeekOrigin.Begin);
-            using (var gz = new GZipStream(output, CompressionMode.Decompress)) {
-                var buf = new byte[1024];
-                int byteCount = 0;
-                while ((byteCount = gz.Read(buf, 0, buf.Length)) > 0) {
-                    cms.Write(buf, 0, byteCount);
-                }
-            }
-            return cms.ToArray();
-        }
+					int b;
+					while ((contentLength == 0 || output.Length < contentLength)
+					       && (b = inputStream.ReadByte()) != -1)
+					{
+						output.WriteByte((byte) b);
+					}
 
-    }
+					if (contentLength > 0 && output.Length != contentLength)
+					{
+						throw new HttpException("Response length does not match content length");
+					}
+				}
+
+				if (GetHeader("content-encoding").Contains("gzip"))
+				{
+					Bytes = UnZip(output);
+				}
+				else
+				{
+					Bytes = output.ToArray();
+				}
+			}
+		}
+
+		private byte[] UnZip(MemoryStream output)
+		{
+			var cms = new MemoryStream();
+			output.Seek(0, SeekOrigin.Begin);
+			using (var gz = new GZipStream(output, CompressionMode.Decompress))
+			{
+				var buf = new byte[1024];
+				var byteCount = 0;
+				while ((byteCount = gz.Read(buf, 0, buf.Length)) > 0)
+				{
+					cms.Write(buf, 0, byteCount);
+				}
+			}
+			return cms.ToArray();
+		}
+	}
 }

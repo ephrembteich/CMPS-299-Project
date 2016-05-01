@@ -1,102 +1,119 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using UnityEngine.SceneManagement;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using Assets.src;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using Random = System.Random;
 
-public class scenario1 : MonoBehaviour, IDrop{
+namespace Assets.STScripts
+{
+	public class Scenario1 : AbstractScenario, IDrop
+	{
+		public GameObject Canvas;
+		public GameObject ChoiceLeave;
+		public GameObject Door;
+		public GameObject GoBoy;
+		public GameObject GoBread;
+		public GameObject GoCroissant;
+		public GameObject GoGirl;
+		public GameObject GoLabneh;
+		public GameObject GoMediumSandwich;
+		public GameObject GoMother;
+		public GameObject GoOlive;
+		public GameObject GoSandwich;
+		public GameObject GoSmallSandwich;
+		public GameObject DoorOpen;
+		private float _savedTimeScale;
+		public GameObject Text;
 
-	public GameObject door;
-	public GameObject openDoor;
-	public GameObject sandwich;
-	public GameObject croissant;
-	public GameObject ChoiceLeave;
-	public GameObject Text;
 
-	//public falafel f;
-	public GameObject Canvas;
-
-	private float savedTimeScale;
-
-
-	public GameSession session;
-
-	public Scene scene;
-
-	// Use this for initialization
-	void Start () {
-		Canvas.GetComponent<AudioSource>().Play();
-		Debug.Log("SSSS");
-		HTTP.Request someRequest = new HTTP.Request("get", "http://jsonplaceholder.typicode.com/posts");
-		someRequest.Send((request) =>
+		public void Chosen(string item)
 		{
-			// parse some JSON, for example:
-			//Debug.Log(request.response.Text);
-			string filePath = @"Game_Result" /*+ @System.DateTime.Now.ToString()*/ + ".txt";
-			//string delimiter = ",";
-			File.WriteAllText(filePath, request.response.Text);
-		});
+			InvokeRepeating("Exit", 0, 0.6f);
+			AbstractChoose(item);
+		}
 
-		
-		//Save s = new Save();
-		//var ass = s.SomeRoutine();
-		//Debug.Log("EEEE" + ass);
-		openDoor.SetActive (false);
-		sandwich.SetActive (true);
-		session = GameSession.getSession();
-		scene = new Scene ("Breakfast Home");
-		scene.Place = "Kitchen";
-		scene.Time = "Morning"; 
-		scene.Variables.Add (new Variable("Convinene", "Croissent is availabe on the table. Labneh Sandwich is in the fridge"));
-		scene.Variables.Add (new Variable("Food Type", "Labneh Croissent"));
-		scene.Variables.Add (new Variable("Pressure", "Mother is not the home"));
-		scene.Variables.Add (new Variable("Portion Size", "Same Portion Size"));
-		session.currentScene = scene;
-		//Debug.Log (session.Age +" " + session.Gender);
-		setCalendar ();
-	}
+		// Use this for initialization
+		private void Start()
+		{
+			Canvas.GetComponent<AudioSource>().Play();
+			//*****
+			Session.Age = 8;
+			int rand = new Random().Next(10);
+			Session.Gender = rand <=5 ? Constants.Boy : Constants.Girl;
+			//****
+			AbstractStart();
 
-	private void setCalendar(){
-		Text t = Text.GetComponent<Text> ();
-		t.text = System.DateTime.Today.Day+" "+
-			CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(System.DateTime.Today.Month);
-	}
+			//Debug.Log("SSSS");
+			//var someRequest = new Request("get", "http://jsonplaceholder.typicode.com/posts");
+			//someRequest.Send(request =>
+			//{
+				// parse some JSON, for example:
+				//Debug.Log(request.response.Text);
+				//var filePath = @"Game_Result" /*+ @System.DateTime.Now.ToString()*/+ ".txt";
+				//string delimiter = ",";
+				//File.WriteAllText(filePath, request.Response.Text);
+			//});
 
-	private void OpenDoor(){
-		door.SetActive (false);
-		openDoor.SetActive (true);
-	}
 
-	private void CloseDoor(){
-		openDoor.SetActive (false);
-		door.SetActive (true);
-	}
+			//Save s = new Save();
+			//var ass = s.SomeRoutine();
+			//Debug.Log("EEEE" + ass);
+			DoorOpen.SetActive(false);
 
-	public void Chosen(string item){
-		session.currentScene.SelectedFoodItem = item;
-		InvokeRepeating ("Exit", 0, 0.6f);
-		//Destroy (sandwich.GetComponent<Draggable>());
-		//Destroy (croissant.GetComponent<Draggable>());
-		//openDoor.SetActive (false);
-		//door.SetActive (true);
-		//door.GetComponent<Button>().interactable = false;
-	}
+			//Debug.Log (session.Age +" " + session.Gender);
+			SetCalendar();
+		}
 
-	public void next(){
-		string result = scene.GetResult();
-		session.Results.AddLast (result);
-		Save.Savecsv ();
-		SceneManager.LoadScene ("transition2");
-	}
 
-	public void GenerateComb(){
-		//enable
-		//disable
-	}
+		protected override void InitMap()
+		{
+			Map = new Dictionary<string, GameObject>
+			{
+				{Constants.Boy, GoBoy},
+				{Constants.Girl, GoGirl},
+				{Constants.Mom, GoMother},
+				{Constants.Croissant, GoCroissant},
+				{Constants.Sandwich, GoSandwich},
+				{Constants.Labneh, GoLabneh},
+				{Constants.Bread, GoBread},
+				{Constants.Olives, GoOlive},
+				{Constants.SmallSand, GoSmallSandwich},
+				{Constants.MediumSand, GoMediumSandwich}
+			};
+		}
 
-	void Exit(){
-		ChoiceLeave.GetComponent<Button> ().image.canvasRenderer.SetAlpha(1);
-		ChoiceLeave.GetComponent<Button> ().image.CrossFadeAlpha (0.5f, 0.6f, false);
+		private void SetCalendar()
+		{
+			var t = Text.GetComponent<Text>();
+			t.text = DateTime.Today.Day + " " +
+			         CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(DateTime.Today.Month);
+		}
+
+		private void OpenDoor()
+		{
+			Door.SetActive(false);
+			DoorOpen.SetActive(true);
+		}
+
+		private void CloseDoor()
+		{
+			DoorOpen.SetActive(false);
+			Door.SetActive(true);
+		}
+
+		public void Next()
+		{
+			AbstractNext("Transition2");
+		}
+
+		private void Exit()
+		{
+			ChoiceLeave.GetComponent<Button>().image.canvasRenderer.SetAlpha(1);
+			ChoiceLeave.GetComponent<Button>().image.CrossFadeAlpha(0.5f, 0.6f, false);
+		}
 	}
 }

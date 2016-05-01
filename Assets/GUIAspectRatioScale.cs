@@ -19,27 +19,31 @@
 * 5:3
 * 16:9
 /*/
+
 using UnityEngine;
-using System.Collections;
- 
-public class GUIAspectRatioScale : MonoBehaviour 
+
+namespace Assets
 {
- public Vector2 scaleOnRatio1 = new Vector2(0.1f, 0.1f);
- private Transform myTrans;
- private float widthHeightRatio;
- 
- void Start () 
- {
-  myTrans = transform;
-  SetScale();
- }
- //call on an event that tells if the aspect ratio changed
- void SetScale()
- {
-  //find the aspect ratio
-  widthHeightRatio = (float)Screen.width/Screen.height;
-  
-  //Apply the scale. We only calculate y since our aspect ratio is x (width) authoritative: width/height (x/y)
-  myTrans.localScale = new Vector3 (scaleOnRatio1.x, widthHeightRatio * scaleOnRatio1.y, 1);
- }
+	public class GuiAspectRatioScale : MonoBehaviour
+	{
+		private Transform _myTrans;
+		public Vector2 ScaleOnRatio1 = new Vector2(0.1f, 0.1f);
+		private float _widthHeightRatio;
+
+		private void Start()
+		{
+			_myTrans = transform;
+			SetScale();
+		}
+
+		//call on an event that tells if the aspect ratio changed
+		private void SetScale()
+		{
+			//find the aspect ratio
+			_widthHeightRatio = (float) Screen.width/Screen.height;
+
+			//Apply the scale. We only calculate y since our aspect ratio is x (width) authoritative: width/height (x/y)
+			_myTrans.localScale = new Vector3(ScaleOnRatio1.x, _widthHeightRatio*ScaleOnRatio1.y, 1);
+		}
+	}
 }

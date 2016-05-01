@@ -1,30 +1,46 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class scenario2 : MonoBehaviour, IDrop{
+namespace Assets.STScripts
+{
+	public class Scenario2 : AbstractScenario, IDrop
+	{
+		public GameObject Banana;
+		public GameObject Chips;
+		public GameObject ChoiceLeave;
+		public GameObject Custard;
+		public GameObject Manouche;
 
-	public GameObject manouche;
-	public GameObject banana;
-	public GameObject custard;
-	public GameObject chips;
-	public GameObject ChoiceLeave;
+		public void Chosen(string item)
+		{
+			InvokeRepeating("Exit", 0, 0.6f);
+			Destroy(Manouche.GetComponent<Draggable>());
+			Destroy(Banana.GetComponent<Draggable>());
+			Destroy(Custard.GetComponent<Draggable>());
+			Destroy(Chips.GetComponent<Draggable>());
+			AbstractChoose(item);
+		}
 
-	public void Chosen(string item){
-		InvokeRepeating ("Exit", 0, 0.6f);
-		Destroy (manouche.GetComponent<Draggable>());
-		Destroy (banana.GetComponent<Draggable>());
-		Destroy (custard.GetComponent<Draggable>());
-		Destroy (chips.GetComponent<Draggable>());
-	}
+		public void Start()
+		{
+			AbstractStart();
+		}
 
-	public void next(){
-		SceneManager.LoadScene ("transition3");
-	}
+		public void Next()
+		{
+			AbstractNext("Transition3");
+		}
 
-	void Exit(){
-		ChoiceLeave.GetComponent<Button> ().image.canvasRenderer.SetAlpha(1);
-		ChoiceLeave.GetComponent<Button> ().image.CrossFadeAlpha (0.5f, 0.6f, false);
+		private void Exit()
+		{
+			ChoiceLeave.GetComponent<Button>().image.canvasRenderer.SetAlpha(1);
+			ChoiceLeave.GetComponent<Button>().image.CrossFadeAlpha(0.5f, 0.6f, false);
+		}
+
+		protected override void InitMap()
+		{
+
+		}
 	}
 }

@@ -1,28 +1,31 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class scenario4 : MonoBehaviour {
+namespace Assets.STScripts
+{
+	public class Scenario4 : MonoBehaviour
+	{
+		public GameObject ChoiceLeave;
+		// Use this for initialization
+		private void Start()
+		{
+		}
 
-	public GameObject ChoiceLeave;
+		// Update is called once per frame
+		private void Update()
+		{
+		}
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+		public void Next()
+		{
+			SceneManager.LoadScene("Transition5");
+		}
 
-	public void next(){
-		SceneManager.LoadScene ("transition5");
-	}
-
-	void Exit(){
-		ChoiceLeave.GetComponent<Button> ().image.canvasRenderer.SetAlpha(1);
-		ChoiceLeave.GetComponent<Button> ().image.CrossFadeAlpha (0.5f, 0.6f, false);
+		private void Exit()
+		{
+			ChoiceLeave.GetComponent<Button>().image.canvasRenderer.SetAlpha(1);
+			ChoiceLeave.GetComponent<Button>().image.CrossFadeAlpha(0.5f, 0.6f, false);
+		}
 	}
 }

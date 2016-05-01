@@ -1,25 +1,30 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class transition3 : MonoBehaviour {
+namespace Assets.STScripts
+{
+	public class Transition3 : MonoBehaviour
+	{
+		public GameObject Canvas;
+		public Image Image;
+		public Sprite SecondImg;
+		public Sprite ThirdImg;
 
-	public GameObject canvas;
-	public Image image;
-	public Sprite secondImg;
-	public Sprite thirdImg;
+		private void Start()
+		{
+			//Invoke ("getImg2", 4);
+			Invoke("Next", 1F);
+		}
 
-	void Start(){
-		//Invoke ("getImg2", 4);
-		Invoke ("next", 1F);
-	}
+		private void GetImg2()
+		{
+			Image.sprite = SecondImg;
+		}
 
-	void getImg2(){
-		image.sprite = secondImg;
-	}
-
-	private void next(){
-		SceneManager.LoadScene ("scenario3");
+		private void Next()
+		{
+			SceneManager.LoadScene("Scenario3");
+		}
 	}
 }

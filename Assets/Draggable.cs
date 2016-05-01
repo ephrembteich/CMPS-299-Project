@@ -1,34 +1,41 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
+﻿using System;
+using UnityEngine;
 using UnityEngine.EventSystems;
-using System;
 
-public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler {
-	private float diffX;
-	private float diffY;
-	public Transform parent = null;
+namespace Assets
+{
+	public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+	{
+		private float _diffX;
+		private float _diffY;
+		public Transform Parent;
 
-	public void OnBeginDrag(PointerEventData eventData){
-		if(this.transform.parent.name!="Canvas"){
-			parent = this.transform.parent;
-			this.transform.SetParent (this.transform.parent.parent);
+		public void OnBeginDrag(PointerEventData eventData)
+		{
+			if (transform.parent.name != "Canvas")
+			{
+				Parent = transform.parent;
+				transform.SetParent(transform.parent.parent);
+			}
+			GetComponent<CanvasGroup>().blocksRaycasts = false;
 		}
-		GetComponent<CanvasGroup> ().blocksRaycasts = false;
-	}
 
-	public void OnDrag(PointerEventData eventData){
-		this.transform.position = new Vector3(eventData.position.x+diffX, eventData.position.y+diffY, 0);
-	}
+		public void OnDrag(PointerEventData eventData)
+		{
+			transform.position = new Vector3(eventData.position.x + _diffX, eventData.position.y + _diffY, 0);
+		}
 
-	public void OnEndDrag(PointerEventData eventData){
-		this.transform.SetParent (parent);
-		GetComponent<CanvasGroup>().blocksRaycasts = true;
-	}
+		public void OnEndDrag(PointerEventData eventData)
+		{
+			transform.SetParent(Parent);
+			GetComponent<CanvasGroup>().blocksRaycasts = true;
+		}
 
-	private float dist(float x1, float y1, float x2, float y2){
-		diffX = x2 - x1;
-		diffY = y2 - y1;
-		return (float)Math.Sqrt (Math.Pow (diffX, 2) + Math.Pow (diffY, 2)) / 2;
+		private float Dist(float x1, float y1, float x2, float y2)
+		{
+			_diffX = x2 - x1;
+			_diffY = y2 - y1;
+			return (float) Math.Sqrt(Math.Pow(_diffX, 2) + Math.Pow(_diffY, 2))/2;
+		}
 	}
 }

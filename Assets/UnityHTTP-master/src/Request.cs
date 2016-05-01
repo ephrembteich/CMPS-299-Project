@@ -1,412 +1,444 @@
-using UnityEngine;
 using System;
-using System.IO;
-using System.Text;
 using System.Collections;
 using System.Collections.Generic;
-using System.Net.Sockets;
-using System.Globalization;
-using System.Threading;
+using System.Diagnostics;
+using System.IO;
 using System.Net.Security;
-using System.Security.Authentication;
+using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Threading;
+using Assets.lib;
+using UnityEngine;
+using Debug = UnityEngine.Debug;
 
-namespace HTTP
+namespace Assets.src
 {
-    public class HTTPException : Exception
-    {
-        public HTTPException (string message) : base(message)
-        {
-        }
-    }
+	public class HttpException : Exception
+	{
+		public HttpException(string message) : base(message)
+		{
+		}
+	}
 
-    public enum RequestState {
-        Waiting, Reading, Done
-    }
+	public enum RequestState
+	{
+		Waiting,
+		Reading,
+		Done
+	}
 
-    public class Request
-    {
+	public class Request
+	{
+		public static bool LogAllRequests = false;
+		public static bool VerboseLogging = false;
+		public static string UnityVersion = Application.unityVersion;
+		public static string OperatingSystem = SystemInfo.operatingSystem;
+		public static byte[] Eol = {(byte) '\r', (byte) '\n'};
+		private static readonly Dictionary<string, string> Etags = new Dictionary<string, string>();
+		private static readonly string[] Sizes = {"B", "KB", "MB", "GB"};
+		private readonly Dictionary<string, List<string>> _headers = new Dictionary<string, List<string>>();
+		public bool AcceptGzip = true;
+		public int BufferSize = 4*1024;
+		public Stream ByteStream;
+		public Action<Request> CompletedCallback;
+		public CookieJar CookieJar = CookieJar.Instance;
+		public Exception Exception;
+		public bool IsDone;
+		public int MaximumRetryCount = 8;
+		public string Method = "GET";
+		public string Protocol = "HTTP/1.1";
+		public Response Response;
+		public long ResponseTime; // in milliseconds
+		public RequestState State = RequestState.Waiting;
+		public bool Synchronous = false;
+		public Uri Uri;
+		public bool UseCache;
 
-        public static bool LogAllRequests = false;
-        public static bool VerboseLogging = false;
-        public static string unityVersion = Application.unityVersion;
-        public static string operatingSystem = SystemInfo.operatingSystem; 
+		public Request(string method, string uri)
+		{
+			this.Method = method;
+			this.Uri = new Uri(uri);
+		}
 
-        public CookieJar cookieJar = CookieJar.Instance;
-        public string method = "GET";
-        public string protocol = "HTTP/1.1";
-        public Stream byteStream;
-        public Uri uri;
-        public static byte[] EOL = { (byte)'\r', (byte)'\n' };
-        public Response response = null;
-        public bool isDone = false;
-        public int maximumRetryCount = 8;
-        public bool acceptGzip = true;
-        public bool useCache = false;
-        public Exception exception = null;
-        public RequestState state = RequestState.Waiting;
-        public long responseTime = 0; // in milliseconds
-        public bool synchronous = false;
-        public int bufferSize = 4 * 1024;
+		public Request(string method, string uri, bool useCache)
+		{
+			this.Method = method;
+			this.Uri = new Uri(uri);
+			this.UseCache = useCache;
+		}
 
-        public Action< HTTP.Request > completedCallback = null;
+		public Request(string method, string uri, byte[] bytes)
+		{
+			this.Method = method;
+			this.Uri = new Uri(uri);
+			ByteStream = new MemoryStream(bytes);
+		}
 
-        Dictionary<string, List<string>> headers = new Dictionary<string, List<string>> ();
-        static Dictionary<string, string> etags = new Dictionary<string, string> ();
+		public Request(string method, string uri, StreamedWwwForm form)
+		{
+			this.Method = method;
+			this.Uri = new Uri(uri);
+			ByteStream = form.Stream;
+			foreach (DictionaryEntry entry in form.Headers)
+			{
+				AddHeader((string) entry.Key, (string) entry.Value);
+			}
+		}
 
-        public Request (string method, string uri)
-        {
-            this.method = method;
-            this.uri = new Uri (uri);
-        }
-
-        public Request (string method, string uri, bool useCache)
-        {
-            this.method = method;
-            this.uri = new Uri (uri);
-            this.useCache = useCache;
-        }
-
-        public Request (string method, string uri, byte[] bytes)
-        {
-            this.method = method;
-            this.uri = new Uri (uri);
-            this.byteStream = new MemoryStream(bytes);
-        }
-
-        public Request(string method, string uri, StreamedWWWForm form){
-            this.method = method;
-            this.uri = new Uri (uri);
-            this.byteStream = form.stream;
-            foreach ( DictionaryEntry entry in form.headers )
-            {
-                this.AddHeader( (string)entry.Key, (string)entry.Value );
-            }
-        }
-
-        public Request( string method, string uri, WWWForm form )
-        {
-            this.method = method;
-            this.uri = new Uri (uri);
-            this.byteStream = new MemoryStream(form.data);
+		public Request(string method, string uri, WWWForm form)
+		{
+			this.Method = method;
+			this.Uri = new Uri(uri);
+			ByteStream = new MemoryStream(form.data);
 #if UNITY_5
-            foreach ( var entry in form.headers )
-            {
-                this.AddHeader( entry.Key, entry.Value );
-            }
+			foreach (var entry in form.headers)
+			{
+				AddHeader(entry.Key, entry.Value);
+			}
 #else
             foreach ( DictionaryEntry entry in form.headers )
             {
                 this.AddHeader( (string)entry.Key, (string)entry.Value );
             }
 #endif
-        }
+		}
 
-        public Request( string method, string uri, Hashtable data )
-        {
-            this.method = method;
-            this.uri = new Uri( uri );
-            this.byteStream = new MemoryStream(Encoding.UTF8.GetBytes( JSON.JsonEncode( data ) ));
-            this.AddHeader( "Content-Type", "application/json" );
-        }
-        
-        public void AddHeader (string name, string value)
-        {
-            name = name.ToLower ().Trim ();
-            value = value.Trim ();
-            if (!headers.ContainsKey (name))
-                headers[name] = new List<string> ();
-            headers[name].Add (value);
-        }
+		public Request(string method, string uri, Hashtable data)
+		{
+			this.Method = method;
+			this.Uri = new Uri(uri);
+			ByteStream = new MemoryStream(Encoding.UTF8.GetBytes(Json.JsonEncode(data)));
+			AddHeader("Content-Type", "application/json");
+		}
 
-        public string GetHeader (string name)
-        {
-            name = name.ToLower ().Trim ();
-            if (!headers.ContainsKey (name))
-                return "";
-            return headers[name][0];
-        }
+		public string Text
+		{
+			set { ByteStream = new MemoryStream(Encoding.UTF8.GetBytes(value)); }
+		}
 
-        public List< string > GetHeaders()
-        {
-            List< string > result = new List< string >();
-            foreach (string name in headers.Keys) {
-                foreach (string value in headers[name]) {
-                    result.Add( name + ": " + value );
-                }
-            }
+		public void AddHeader(string name, string value)
+		{
+			name = name.ToLower().Trim();
+			value = value.Trim();
+			if (!_headers.ContainsKey(name))
+				_headers[name] = new List<string>();
+			_headers[name].Add(value);
+		}
 
-            return result;
-        }
+		public string GetHeader(string name)
+		{
+			name = name.ToLower().Trim();
+			if (!_headers.ContainsKey(name))
+				return "";
+			return _headers[name][0];
+		}
 
-        public List<string> GetHeaders (string name)
-        {
-            name = name.ToLower ().Trim ();
-            if (!headers.ContainsKey (name))
-                headers[name] = new List<string> ();
-            return headers[name];
-        }
+		public List<string> GetHeaders()
+		{
+			var result = new List<string>();
+			foreach (var name in _headers.Keys)
+			{
+				foreach (var value in _headers[name])
+				{
+					result.Add(name + ": " + value);
+				}
+			}
 
-        public void SetHeader (string name, string value)
-        {
-            name = name.ToLower ().Trim ();
-            value = value.Trim ();
-            if (!headers.ContainsKey (name))
-                headers[name] = new List<string> ();
-            headers[name].Clear ();
-            headers[name].TrimExcess();
-            headers[name].Add (value);
-        }
+			return result;
+		}
 
-        private void GetResponse() {
-            System.Diagnostics.Stopwatch curcall = new System.Diagnostics.Stopwatch();
-            curcall.Start();
-            try {
+		public List<string> GetHeaders(string name)
+		{
+			name = name.ToLower().Trim();
+			if (!_headers.ContainsKey(name))
+				_headers[name] = new List<string>();
+			return _headers[name];
+		}
 
-                var retry = 0;
-                while (++retry < maximumRetryCount) {
-                    if (useCache) {
-                        string etag = "";
-                        if (etags.TryGetValue (uri.AbsoluteUri, out etag)) {
-                            SetHeader ("If-None-Match", etag);
-                        }
-                    }
+		public void SetHeader(string name, string value)
+		{
+			name = name.ToLower().Trim();
+			value = value.Trim();
+			if (!_headers.ContainsKey(name))
+				_headers[name] = new List<string>();
+			_headers[name].Clear();
+			_headers[name].TrimExcess();
+			_headers[name].Add(value);
+		}
 
-                    SetHeader ("Host", uri.Host);
+		private void GetResponse()
+		{
+			var curcall = new Stopwatch();
+			curcall.Start();
+			try
+			{
+				var retry = 0;
+				while (++retry < MaximumRetryCount)
+				{
+					if (UseCache)
+					{
+						var etag = "";
+						if (Etags.TryGetValue(Uri.AbsoluteUri, out etag))
+						{
+							SetHeader("If-None-Match", etag);
+						}
+					}
 
-                    var client = new TcpClient ();
-                    client.Connect (uri.Host, uri.Port);
-                    using (var stream = client.GetStream ()) {
-                        var ostream = stream as Stream;
-                        if (uri.Scheme.ToLower() == "https") {
-                            ostream = new SslStream (stream, false, new RemoteCertificateValidationCallback (ValidateServerCertificate));
-                            try {
-                                var ssl = ostream as SslStream;
-                                ssl.AuthenticateAsClient (uri.Host);
-                            } catch (Exception e) {
+					SetHeader("Host", Uri.Host);
+
+					var client = new TcpClient();
+					client.Connect(Uri.Host, Uri.Port);
+					using (var stream = client.GetStream())
+					{
+						var ostream = stream as Stream;
+						if (Uri.Scheme.ToLower() == "https")
+						{
+							ostream = new SslStream(stream, false, ValidateServerCertificate);
+							try
+							{
+								var ssl = ostream as SslStream;
+								ssl.AuthenticateAsClient(Uri.Host);
+							}
+							catch (Exception e)
+							{
 #if !UNITY_EDITOR
                                 Console.WriteLine ("SSL authentication failed.");
                                 Console.WriteLine (e);
 #else
-                                Debug.LogError ("SSL authentication failed.");
-                                Debug.LogException(e);
+								Debug.LogError("SSL authentication failed.");
+								Debug.LogException(e);
 #endif
-                                return;
-                            }
-                        }
-                        WriteToStream( ostream );
-                        response = new Response ();
-                        response.request = this;
-                        state = RequestState.Reading;
-                        response.ReadFromStream( ostream );
-                    }
-                    client.Close ();
+								return;
+							}
+						}
+						WriteToStream(ostream);
+						Response = new Response();
+						Response.Request = this;
+						State = RequestState.Reading;
+						Response.ReadFromStream(ostream);
+					}
+					client.Close();
 
-                    switch (response.status) {
-                    case 307:
-                    case 302:
-                    case 301:
-                        uri = new Uri (response.GetHeader ("Location"));
-                        continue;
-                    default:
-                        retry = maximumRetryCount;
-                        break;
-                    }
-                }
-                if (useCache) {
-                    string etag = response.GetHeader ("etag");
-                    if (etag.Length > 0)
-                        etags[uri.AbsoluteUri] = etag;
-                }
-
-            } catch (Exception e) {
+					switch (Response.Status)
+					{
+						case 307:
+						case 302:
+						case 301:
+							Uri = new Uri(Response.GetHeader("Location"));
+							continue;
+						default:
+							retry = MaximumRetryCount;
+							break;
+					}
+				}
+				if (UseCache)
+				{
+					var etag = Response.GetHeader("etag");
+					if (etag.Length > 0)
+						Etags[Uri.AbsoluteUri] = etag;
+				}
+			}
+			catch (Exception e)
+			{
 #if !UNITY_EDITOR
                 Console.WriteLine ("Unhandled Exception, aborting request.");
                 Console.WriteLine (e);
 #else
-                Debug.LogError("Unhandled Exception, aborting request.");
-                Debug.LogException(e);
+				Debug.LogError("Unhandled Exception, aborting request.");
+				Debug.LogException(e);
 #endif
-                exception = e;
-                response = null;
-            }
+				Exception = e;
+				Response = null;
+			}
 
-            state = RequestState.Done;
-            isDone = true;
-            responseTime = curcall.ElapsedMilliseconds;
+			State = RequestState.Done;
+			IsDone = true;
+			ResponseTime = curcall.ElapsedMilliseconds;
 
-            if ( byteStream != null )
-            {
-                byteStream.Close();
-            }
+			if (ByteStream != null)
+			{
+				ByteStream.Close();
+			}
 
-            if ( completedCallback != null )
-            {
-                if (synchronous) {
-                    completedCallback(this);
-                } else {
-                    // we have to use this dispatcher to avoid executing the callback inside this worker thread
-                    ResponseCallbackDispatcher.Singleton.requests.Enqueue( this );
-                }
-            }
+			if (CompletedCallback != null)
+			{
+				if (Synchronous)
+				{
+					CompletedCallback(this);
+				}
+				else
+				{
+					// we have to use this dispatcher to avoid executing the callback inside this worker thread
+					ResponseCallbackDispatcher.Singleton.Requests.Enqueue(this);
+				}
+			}
 
-            if ( LogAllRequests )
-            {
+			if (LogAllRequests)
+			{
 #if !UNITY_EDITOR
                 System.Console.WriteLine("NET: " + InfoString( VerboseLogging ));
 #else
-                if ( response != null && response.status >= 200 && response.status < 300 )
-                {
-                    Debug.Log( InfoString( VerboseLogging ) );
-                }
-                else if ( response != null && response.status >= 400 )
-                {
-                    Debug.LogError( InfoString( VerboseLogging ) );
-                }
-                else
-                {
-                    Debug.LogWarning( InfoString( VerboseLogging ) );
-                }
+				if (Response != null && Response.Status >= 200 && Response.Status < 300)
+				{
+					Debug.Log(InfoString(VerboseLogging));
+				}
+				else if (Response != null && Response.Status >= 400)
+				{
+					Debug.LogError(InfoString(VerboseLogging));
+				}
+				else
+				{
+					Debug.LogWarning(InfoString(VerboseLogging));
+				}
 #endif
-            }            
-        }
-        
-        public virtual void Send( Action< HTTP.Request > callback = null)
-        {
-            
-            if (!synchronous && callback != null && ResponseCallbackDispatcher.Singleton == null )
-            {
-                ResponseCallbackDispatcher.Init();
-            }
+			}
+		}
 
-            completedCallback = callback;
+		public virtual void Send(Action<Request> callback = null)
+		{
+			if (!Synchronous && callback != null && ResponseCallbackDispatcher.Singleton == null)
+			{
+				ResponseCallbackDispatcher.Init();
+			}
 
-            isDone = false;
-            state = RequestState.Waiting;
-            if ( acceptGzip )
-            {
-                SetHeader ("Accept-Encoding", "gzip");
-            }
+			CompletedCallback = callback;
 
-            if ( this.cookieJar != null )
-            {
-                List< Cookie > cookies = this.cookieJar.GetCookies( new CookieAccessInfo( uri.Host, uri.AbsolutePath ) );
-                string cookieString = this.GetHeader( "cookie" );
-                for ( int cookieIndex = 0; cookieIndex < cookies.Count; ++cookieIndex )
-                {
-                    if ( cookieString.Length > 0 && cookieString[ cookieString.Length - 1 ] != ';' )
-                    {
-                        cookieString += ';';
-                    }
-                    cookieString += cookies[ cookieIndex ].name + '=' + cookies[ cookieIndex ].value + ';';
-                }
-                SetHeader( "cookie", cookieString );
-            }
+			IsDone = false;
+			State = RequestState.Waiting;
+			if (AcceptGzip)
+			{
+				SetHeader("Accept-Encoding", "gzip");
+			}
 
-            if ( byteStream != null && byteStream.Length > 0 && GetHeader ("Content-Length") == "" ) {
-                SetHeader( "Content-Length", byteStream.Length.ToString() );
-            }
+			if (CookieJar != null)
+			{
+				var cookies = CookieJar.GetCookies(new CookieAccessInfo(Uri.Host, Uri.AbsolutePath));
+				var cookieString = GetHeader("cookie");
+				for (var cookieIndex = 0; cookieIndex < cookies.Count; ++cookieIndex)
+				{
+					if (cookieString.Length > 0 && cookieString[cookieString.Length - 1] != ';')
+					{
+						cookieString += ';';
+					}
+					cookieString += cookies[cookieIndex].Name + '=' + cookies[cookieIndex].Value + ';';
+				}
+				SetHeader("cookie", cookieString);
+			}
 
-            if ( GetHeader( "User-Agent" ) == "" ) {
-                try {
-                    SetHeader( "User-Agent", "UnityWeb/1.0 (Unity " + Request.unityVersion + "; " + Request.operatingSystem + ")" );
-                } catch (Exception) {
-                    SetHeader( "User-Agent", "UnityWeb/1.0" );
-                }
-            }
+			if (ByteStream != null && ByteStream.Length > 0 && GetHeader("Content-Length") == "")
+			{
+				SetHeader("Content-Length", ByteStream.Length.ToString());
+			}
 
-            if ( GetHeader( "Connection" ) == "" ) {
-                SetHeader( "Connection", "close" );
-            }
-            
-            // Basic Authorization
-            if (!String.IsNullOrEmpty(uri.UserInfo)) {    
-                SetHeader("Authorization", "Basic " + System.Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(uri.UserInfo)));
-            }
-            
-            if (synchronous) {
-                GetResponse();
-            } else {
-                ThreadPool.QueueUserWorkItem (new WaitCallback ( delegate(object t) {
-                    GetResponse();
-                })); 
-            }
-        }
+			if (GetHeader("User-Agent") == "")
+			{
+				try
+				{
+					SetHeader("User-Agent", "UnityWeb/1.0 (Unity " + UnityVersion + "; " + OperatingSystem + ")");
+				}
+				catch (Exception)
+				{
+					SetHeader("User-Agent", "UnityWeb/1.0");
+				}
+			}
 
-        public string Text {
-            set { byteStream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes (value)); }
-        }
+			if (GetHeader("Connection") == "")
+			{
+				SetHeader("Connection", "close");
+			}
 
-        public static bool ValidateServerCertificate (object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
-        {
+			// Basic Authorization
+			if (!String.IsNullOrEmpty(Uri.UserInfo))
+			{
+				SetHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(Uri.UserInfo)));
+			}
+
+			if (Synchronous)
+			{
+				GetResponse();
+			}
+			else
+			{
+				ThreadPool.QueueUserWorkItem(delegate { GetResponse(); });
+			}
+		}
+
+		public static bool ValidateServerCertificate(object sender, X509Certificate certificate, X509Chain chain,
+			SslPolicyErrors sslPolicyErrors)
+		{
 #if !UNITY_EDITOR
             System.Console.WriteLine( "NET: SSL Cert: " + sslPolicyErrors.ToString() );
 #else
-            Debug.LogWarning("SSL Cert Error: " + sslPolicyErrors.ToString ());
+			Debug.LogWarning("SSL Cert Error: " + sslPolicyErrors);
 #endif
-            return true;
-        }
+			return true;
+		}
 
-        void WriteToStream( Stream outputStream )
-        {
-            var stream = new BinaryWriter( outputStream );
-            stream.Write( ASCIIEncoding.ASCII.GetBytes( method.ToUpper () + " " + uri.PathAndQuery + " " + protocol ) );
-            stream.Write( EOL );
+		private void WriteToStream(Stream outputStream)
+		{
+			var stream = new BinaryWriter(outputStream);
+			stream.Write(Encoding.ASCII.GetBytes(Method.ToUpper() + " " + Uri.PathAndQuery + " " + Protocol));
+			stream.Write(Eol);
 
-            foreach (string name in headers.Keys) {
-                foreach (string value in headers[name]) {
-                    stream.Write( ASCIIEncoding.ASCII.GetBytes( name ) );
-                    stream.Write( ':');
-                    stream.Write( ASCIIEncoding.ASCII.GetBytes( value ) );
-                    stream.Write( EOL );
-                }
-            }
+			foreach (var name in _headers.Keys)
+			{
+				foreach (var value in _headers[name])
+				{
+					stream.Write(Encoding.ASCII.GetBytes(name));
+					stream.Write(':');
+					stream.Write(Encoding.ASCII.GetBytes(value));
+					stream.Write(Eol);
+				}
+			}
 
-            stream.Write( EOL );
+			stream.Write(Eol);
 
-            if (byteStream == null){
-                return;
-            }
+			if (ByteStream == null)
+			{
+				return;
+			}
 
-            long numBytesToRead = byteStream.Length;
-            byte[] buffer = new byte[bufferSize];
-            while (numBytesToRead > 0){
-                int readed = byteStream.Read(buffer, 0, bufferSize);
-                stream.Write(buffer, 0, readed);
-                numBytesToRead -= readed;
-            }
-        }
+			var numBytesToRead = ByteStream.Length;
+			var buffer = new byte[BufferSize];
+			while (numBytesToRead > 0)
+			{
+				var readed = ByteStream.Read(buffer, 0, BufferSize);
+				stream.Write(buffer, 0, readed);
+				numBytesToRead -= readed;
+			}
+		}
 
-        private static string[] sizes = { "B", "KB", "MB", "GB" };
-        public string InfoString( bool verbose )
-        {
-            string status = isDone && response != null ? response.status.ToString() : "---";
-            string message = isDone && response != null ? response.message : "Unknown";
-            double size = isDone && response != null && response.bytes != null ? response.bytes.Length : 0.0f;
+		public string InfoString(bool verbose)
+		{
+			var status = IsDone && Response != null ? Response.Status.ToString() : "---";
+			var message = IsDone && Response != null ? Response.Message : "Unknown";
+			double size = IsDone && Response != null && Response.Bytes != null ? Response.Bytes.Length : 0.0f;
 
-            int order = 0;
-            while ( size >= 1024.0f && order + 1 < sizes.Length )
-            {
-                ++order;
-                size /= 1024.0f;
-            }
+			var order = 0;
+			while (size >= 1024.0f && order + 1 < Sizes.Length)
+			{
+				++order;
+				size /= 1024.0f;
+			}
 
-            string sizeString = String.Format( "{0:0.##}{1}", size, sizes[ order ] );
+			var sizeString = String.Format("{0:0.##}{1}", size, Sizes[order]);
 
-            string result = uri.ToString() + " [ " + method.ToUpper() + " ] [ " + status + " " + message + " ] [ " + sizeString + " ] [ " + responseTime + "ms ]";
+			var result = Uri + " [ " + Method.ToUpper() + " ] [ " + status + " " + message + " ] [ " + sizeString + " ] [ " +
+			             ResponseTime + "ms ]";
 
-            if ( verbose && response != null )
-            {
-                result += "\n\nRequest Headers:\n\n" + String.Join( "\n", GetHeaders().ToArray() );
-                result += "\n\nResponse Headers:\n\n" + String.Join( "\n", response.GetHeaders().ToArray() );
+			if (verbose && Response != null)
+			{
+				result += "\n\nRequest Headers:\n\n" + String.Join("\n", GetHeaders().ToArray());
+				result += "\n\nResponse Headers:\n\n" + String.Join("\n", Response.GetHeaders().ToArray());
 
-                if ( response.Text != null )
-                {
-                    result += "\n\nResponse Body:\n" + response.Text;
-                }
-            }
+				if (Response.Text != null)
+				{
+					result += "\n\nResponse Body:\n" + Response.Text;
+				}
+			}
 
-            return result;
-        }
-    }
+			return result;
+		}
+	}
 }

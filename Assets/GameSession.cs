@@ -1,41 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using HTTP;
+using Assets.src;
+using Assets.STScripts;
 
-
-public class GameSession
+namespace Assets
 {
-	public int Age { get; set; }
-
-	public CookieAccessInfo c;
-
-	public String Gender { get; set; }
-
-	public List<Scene> Scenes { get; set; }
-
-	public Scene currentScene { get; set; }
-
-	private static GameSession Session;
-
-	public LinkedList<String> Results;
-
-	private GameSession (){
-		Results = new LinkedList <String>();
-	}
-
-	public void WriteResult(){
-		Results.AddLast("Scene: " + currentScene.SceneName + " "  );
-	}
-
-	public static GameSession getSession ()
+	public class GameSession
 	{
-		if (Session == null) {
-			Session = new  GameSession ();
-		}
-		return Session;
-	}
-		
-}
+		private static GameSession _session;
+		public CookieAccessInfo C;
+		public LinkedList<String> Results;
+		private PreConfiguredScenarios _generator;
 
+		private GameSession()
+		{
+			_generator = new PreConfiguredScenarios();
+			Results = new LinkedList<String>();
+			Scenes = _generator.GenerateScenes();
+			CurrentScene = Scenes.ElementAt(CurrentLevel);
+		}
+
+		public int Age { get; set; }
+		public String Gender { get; set; }
+		public List<Scene> Scenes { get; set; }
+		public Scene CurrentScene { get; set; }
+		public int CurrentLevel { get; set; }
+
+		public void WriteResult()
+		{
+			Results.AddLast("Scene: " + CurrentScene.SceneName + " ");
+		}
+
+		public void IncrementLevel()
+		{
+			CurrentLevel++;
+			CurrentScene = Scenes.ElementAt(CurrentLevel);
+		}
+
+		public static GameSession GetSession()
+		{
+			return _session ?? (_session = new GameSession());
+		}
+	}
+}

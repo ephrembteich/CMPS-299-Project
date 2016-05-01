@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class feedback : MonoBehaviour {
-
-	public void exit(){
-		Application.Quit();
+namespace Assets
+{
+	public class Feedback : MonoBehaviour
+	{
+		public void Exit()
+		{
+			Application.Quit();
+		}
 	}
 }
