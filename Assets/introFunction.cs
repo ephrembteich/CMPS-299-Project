@@ -37,6 +37,6 @@ public class introFunction : MonoBehaviour {
 	}
 
 	public void next(){
-		SceneManager.LoadScene("TransitionToKitchen");
+		SceneManager.LoadScene("transition1");
 	}
 }
