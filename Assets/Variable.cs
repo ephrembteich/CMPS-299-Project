@@ -8,8 +8,9 @@ public class Variable
 	public String Name;
 	public String Description { get; set; }
 
-	public Variable (String Name, String desc)
+	public Variable (String name, String desc)
 	{
+		this.Name = name;
 		Description = desc;
 	}
 }

@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
 using System.Globalization;
+using System.IO;
 
 public class scenario1 : MonoBehaviour, IDrop{
 
@@ -12,6 +13,7 @@ public class scenario1 : MonoBehaviour, IDrop{
 	public GameObject croissant;
 	public GameObject ChoiceLeave;
 	public GameObject Text;
+	//public falafel f;
 
 	public GameSession session;
 
@@ -24,8 +26,13 @@ public class scenario1 : MonoBehaviour, IDrop{
 		someRequest.Send((request) =>
 		{
 			// parse some JSON, for example:
-			Debug.Log(request.response.Text);
+			//Debug.Log(request.response.Text);
+			string filePath = @"Game_Result" /*+ @System.DateTime.Now.ToString()*/ + ".txt";
+			//string delimiter = ",";
+			File.WriteAllText(filePath, request.response.Text);
 		});
+
+		
 		//Save s = new Save();
 		//var ass = s.SomeRoutine();
 		//Debug.Log("EEEE" + ass);

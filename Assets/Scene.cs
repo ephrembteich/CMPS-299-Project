@@ -17,7 +17,7 @@ public class Scene
 
 	public List<Variable> Variables { get; set; }
 
-	public Variable variable;
+	//public Variable variable;
 
 	public String result;
 
