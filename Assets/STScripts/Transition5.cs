@@ -11,7 +11,6 @@ namespace Assets.STScripts
 		public Sprite SecondImg;
 		public Sprite ThirdImg;
 
-<<<<<<< HEAD
 		void Start(){
 			Invoke ("getImg2", 4);
 			Invoke ("next", 7.5F);
@@ -23,17 +22,8 @@ namespace Assets.STScripts
 			}
 		}
 
-		void getImg2(){
-=======
-		private void Start()
-		{
-			//Invoke ("getImg2", 4);
-			Invoke("Next", 1F);
-		}
-
 		private void GetImg2()
 		{
->>>>>>> 0ec943e2134124747fff0a33a9a47f91796f07da
 			Image.sprite = SecondImg;
 		}
 
