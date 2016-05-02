@@ -28,15 +28,14 @@ namespace Assets.STScripts
 			SceneManager.LoadScene("Feedback");
 		}
 
+		protected override void InitMap()
+		{
+		}
+
 		private void Exit()
 		{
 			ChoiceLeave.GetComponent<Button>().image.canvasRenderer.SetAlpha(1);
 			ChoiceLeave.GetComponent<Button>().image.CrossFadeAlpha(0.5f, 0.6f, false);
-		}
-
-		protected override void InitMap()
-		{
-
 		}
 	}
 }
