@@ -10,6 +10,7 @@ namespace Assets.STScripts
 		public Image Image;
 		public Sprite SecondImg;
 		public Sprite ThirdImg;
+		//comment
 
 		void Start(){
 			Invoke ("getImg2", 4);
