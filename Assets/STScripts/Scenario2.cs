@@ -27,7 +27,7 @@ namespace Assets.STScripts
 		public GameObject GoPriceTag5;
 		public GameObject GoPriceTag6;
 
-		private bool invoked = false;
+		//private bool invoked = false;
 
 		public void Start()
 		{
