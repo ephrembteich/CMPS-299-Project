@@ -17,13 +17,14 @@ namespace Assets.STScripts
 			Invoke("Next", 7.5F);
 		}
 			
-		void Update(){
+		private void Update(){
 			if (Input.GetMouseButtonDown (0) || Input.GetMouseButtonDown (1) || Input.GetMouseButtonDown (2)) {
 				Next ();
 			}
 		}
 
-		void getImg2(){
+		public void GetImg2()
+		{
 			Image.sprite = SecondImg;
 		}
 

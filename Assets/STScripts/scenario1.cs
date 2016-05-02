@@ -106,7 +106,7 @@ namespace Assets.STScripts
 			DoorOpen.SetActive(false);
 			Door.SetActive(true);
 		}
-
+			
 		private void Exit()
 		{
 			ChoiceLeave.GetComponent<Button>().image.canvasRenderer.SetAlpha(1);

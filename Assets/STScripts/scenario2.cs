@@ -33,7 +33,7 @@ namespace Assets.STScripts
 		{
 			AbstractStart();
 		}
-
+			
 		public void Update(){
 			/*if(Tray.transform.childCount==0 && !invoked){
 				InvokeRepeating("TrayAnimation", 0, 0.6f);
@@ -49,12 +49,12 @@ namespace Assets.STScripts
 			InvokeRepeating("Exit", 0, 0.6f);
 			AbstractChoose(item);
 		}
-
+			
 		public void Next()
 		{
 			AbstractNext("Transition3");
 		}
-
+			
 		public void CloseCover()
 		{
 			GoCoverOpened.SetActive (false);
@@ -63,8 +63,8 @@ namespace Assets.STScripts
 
 		public void OpenCover()
 		{
-			GoCoverClosed.SetActive(false);
-			GoCoverOpened.SetActive(true);
+			GoCoverClosed.SetActive (false);
+			GoCoverOpened.SetActive (true);
 		}
 
 		protected override void InitMap()

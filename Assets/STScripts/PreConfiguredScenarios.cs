@@ -8,7 +8,9 @@ namespace Assets.STScripts
 		//Breakfast
 		public List<Scene> BreakfastScenes { get; set; }
 		//market on the way to school
+
 		public List<Scene> MarketScenes { get; set; }
+
 		//school play ground
 		public List<Scene> SchoolPlayGroundScenes { get; set; }
 
@@ -80,7 +82,7 @@ namespace Assets.STScripts
 					return scene4;
 			}
 		}
-
+			
 		private Scene GetMarketConfiguration()
 		{
 			var rndGenerator = new Random();
@@ -152,7 +154,7 @@ namespace Assets.STScripts
 				return scene4;
 			}
 		}
-
+			
 		private Scene GetSchoolPlayGroundConfiguration()
 		{
 			return null;

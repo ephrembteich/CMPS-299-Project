@@ -4,13 +4,14 @@ using UnityEngine.UI;
 
 namespace Assets.STScripts
 {
-	public class Transition5 : MonoBehaviour
+	public class Transition2 : MonoBehaviour
 	{
 		public GameObject Canvas;
 		public Image Image;
 		public Sprite SecondImg;
 		public Sprite ThirdImg;
 
+<<<<<<< HEAD
 		void Start(){
 			Invoke ("getImg2", 4);
 			Invoke ("next", 7.5F);
@@ -21,7 +22,15 @@ namespace Assets.STScripts
 				Next ();
 			}
 		}
+	
+=======
+		private void Start()
+		{
+			//Invoke ("getImg2", 4);
+			Invoke("Next", 1F);
+		}
 
+>>>>>>> 0ec943e2134124747fff0a33a9a47f91796f07da
 		private void GetImg2()
 		{
 			Image.sprite = SecondImg;
@@ -29,7 +38,7 @@ namespace Assets.STScripts
 
 		private void Next()
 		{
-			SceneManager.LoadScene("Scenario5");
+			SceneManager.LoadScene("Scenario2");
 		}
 	}
 }

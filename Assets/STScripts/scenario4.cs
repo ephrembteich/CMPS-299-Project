@@ -46,7 +46,7 @@ namespace Assets.STScripts
 
 		protected override void InitMap()
 		{
-
+			
 		}
 	}
 }

@@ -21,7 +21,7 @@ namespace Assets.STScripts
 				Next ();
 			}
 		}
-	
+
 		private void GetImg2()
 		{
 			Image.sprite = SecondImg;
