@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Globalization;
+using System;
 
 namespace Assets.STScripts
 {
@@ -10,9 +12,11 @@ namespace Assets.STScripts
 		public GameObject openDoor;
 		public GameObject ChoiceLeave;
 		public GameObject Tray;
+		public GameObject Text;
 
 		public void Start(){
 			InvokeRepeating("TrayAnimation", 0, 0.6f);
+			SetCalendar();
 		}
 
 		public void Next(){
@@ -33,6 +37,13 @@ namespace Assets.STScripts
 		public void CloseDoor(){
 			openDoor.SetActive (false);
 			door.SetActive (true);
+		}
+
+		private void SetCalendar()
+		{
+			var t = Text.GetComponent<Text>();
+			t.text = DateTime.Today.Day + " " +
+				CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(DateTime.Today.Month);
 		}
 
 		private void TrayAnimation(){
