@@ -1,42 +1,49 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using System;
+using UnityEngine.UI;
 
-public class introFunction : MonoBehaviour {
-
-	private int age;
-	private string gender;
-	public GameObject nextBtn;
-	public GameSession session;
-
-	// Use this for initialization
-	void Start () {
-		session = GameSession.getSession ();
-	}
-
-	// Update is called once per frame
-	void Update () {
-
-	}
-
-	public void setAge(int param){
-		session.Age = param;
-		age = param;
-		if(gender!= null){
-			nextBtn.GetComponentInChildren<Button> ().interactable = true;
+namespace Assets
+{
+	public class IntroFunction : MonoBehaviour
+	{
+		private int age;
+		private string gender;
+		public GameObject NextBtn;
+		public GameSession Session;
+		// Use this for initialization
+		private void Start()
+		{
+			Session = GameSession.GetSession();
 		}
-	}
 
-	public void setGender(string param){
-		session.Gender = param;
-		gender = param;
-		if(age != 0){
-			nextBtn.GetComponentInChildren<Button> ().interactable = true;
+		// Update is called once per frame
+		private void Update()
+		{
 		}
-	}
 
-	public void next(){
-		SceneManager.LoadScene("transition1");
+		public void SetAge(int param)
+		{
+			Session.Age = param;
+			age = param;
+			if (gender != null)
+			{
+				NextBtn.GetComponentInChildren<Button>().interactable = true;
+			}
+		}
+
+		public void SetGender(string param)
+		{
+			Session.Gender = param;
+			gender = param;
+			if (age != 0)
+			{
+				NextBtn.GetComponentInChildren<Button>().interactable = true;
+			}
+		}
+
+		public void Next()
+		{
+			SceneManager.LoadScene("Transition1");
+		}
 	}
 }

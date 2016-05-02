@@ -1,15 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-public class Variable
+namespace Assets
 {
-	public String Name;
-	public String Description { get; set; }
-
-	public Variable (String Name, String desc)
+	public class Variable
 	{
-		Description = desc;
+		public String Name;
+
+		public Variable(String name, String desc)
+		{
+			Name = name;
+			Description = desc;
+		}
+
+		public String Description { get; set; }
 	}
 }

@@ -1,40 +1,52 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class scenario4 : MonoBehaviour {
+namespace Assets.STScripts
+{
+	public class Scenario4 : AbstractScenario, IDrop
+	{
+		public GameObject door;
+		public GameObject openDoor;
+		public GameObject ChoiceLeave;
+		public GameObject Tray;
 
-	public GameObject door;
-	public GameObject openDoor;
-	public GameObject ChoiceLeave;
+		public void Start(){
+			InvokeRepeating("TrayAnimation", 0, 0.6f);
+		}
 
-	// Use this for initialization
-	void Start () {
-		openDoor.SetActive (false);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+		public void Next(){
+			SceneManager.LoadScene("Transition5");
+		}
 
-	public void OpenDoor(){
-		door.SetActive (false);
-		openDoor.SetActive (true);
-	}
+		public void Chosen(string item)
+		{
+			InvokeRepeating("Exit", 0, 0.6f);
+			AbstractChoose(item);
+		}
 
-	public void CloseDoor(){
-		openDoor.SetActive (false);
-		door.SetActive (true);
-	}
+		public void OpenDoor(){
+			door.SetActive (false);
+			openDoor.SetActive (true);
+		}
 
-	public void next(){
-		SceneManager.LoadScene ("transition5");
-	}
+		public void CloseDoor(){
+			openDoor.SetActive (false);
+			door.SetActive (true);
+		}
 
-	void Exit(){
-		ChoiceLeave.GetComponent<Button> ().image.canvasRenderer.SetAlpha(1);
-		ChoiceLeave.GetComponent<Button> ().image.CrossFadeAlpha (0.5f, 0.6f, false);
+		private void TrayAnimation(){
+			
+		}
+
+		private void Exit(){
+			ChoiceLeave.GetComponent<Button>().image.canvasRenderer.SetAlpha(1);
+			ChoiceLeave.GetComponent<Button>().image.CrossFadeAlpha(0.5f, 0.6f, false);
+		}
+
+		protected override void InitMap()
+		{
+
+		}
 	}
 }

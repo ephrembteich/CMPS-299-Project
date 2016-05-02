@@ -1,41 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 
-/// <summary>
-/// A class to holds the logic in a scene
-/// </summary>
-public class Scene
+namespace Assets
 {
-	public String SceneName { get; set; }
+	public class Scene
+	{
+		public String Result;
 
-	public String Place { get; set; }
-
-	public String Time { get; set; }
-
-	public List<Variable> Variables { get; set; }
-
-	public Variable variable;
-
-	public String result;
-
-	public String SelectedFoodItem { get; set; }
-
-	public Scene(String SceneName){
-		this.SceneName = SceneName;
-		Variables = new List<Variable> ();
-	}
-
-	public String GetResult(){
-		result += SceneName;
-		foreach(Variable varr in Variables){
-			result += varr.Description;
+		public Scene(String sceneName)
+		{
+			this.SceneName = sceneName;
+			Variables = new List<Variable>();
+			FoodItems = new List<String>();
 		}
 
-		result += SelectedFoodItem;
-		return result;
-	}
+		public String SceneName { get; set; }
+		public String Place { get; set; }
+		public String Time { get; set; }
+		public List<Variable> Variables { get; set; }
+		public List<String> FoodItems { get; set; }
+		public bool IsMom { get; set; }
+		public String SelectedFoodItem { get; set; }
 
+		public String GetResult()
+		{
+			Result += SceneName;
+			foreach (var varr in Variables)
+			{
+				Result += varr.Description;
+			}
+
+			Result += SelectedFoodItem;
+			return Result;
+		}
+	}
 }

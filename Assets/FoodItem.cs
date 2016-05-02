@@ -1,27 +1,18 @@
 ﻿using System;
 
-public class FoodItem
+namespace Assets
 {
-	public String Name {
-		get;
-		set;
-	}
-
-	public String Location {
-		get;
-		set;
-	}
-
-	public String Notes {
-		get;
-		set;
-	}
-
-	public FoodItem (String Name, String Location, String Notes)
+	public class FoodItem
 	{
-		this.Name = Name;
-		this.Location = Location;
-		this.Notes = Notes;
-	}
+		public FoodItem(String name, String location, String notes)
+		{
+			this.Name = name;
+			this.Location = location;
+			this.Notes = notes;
+		}
 
+		public String Name { get; set; }
+		public String Location { get; set; }
+		public String Notes { get; set; }
+	}
 }

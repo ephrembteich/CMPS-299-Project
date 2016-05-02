@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class mainScene : MonoBehaviour {
+public class MainScene : MonoBehaviour {
 
 	public InputField mainInputField;
 	public GameObject playBtn;
@@ -23,6 +23,8 @@ public class mainScene : MonoBehaviour {
 	}
 
 	public void play(){
+		//to retract the id of the child take the below param
+		//mainInputField.text
 		SceneManager.LoadScene("introLevel");
 	}
 }
