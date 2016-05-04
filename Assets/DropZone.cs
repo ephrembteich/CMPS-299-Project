@@ -13,7 +13,6 @@ namespace Assets
 				d.Parent = transform;
 				d.transform.position = d.Parent.transform.position;
 				var go = GameObject.Find("Controller");
-				Debug.Log(go.scene.name);
 				var script = go.GetComponent<IDrop>();
 				script.Chosen(d.name);
 			}

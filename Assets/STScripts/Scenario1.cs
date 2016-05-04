@@ -34,9 +34,9 @@ namespace Assets.STScripts
 		{
 			Canvas.GetComponent<AudioSource>().Play();
 			//*****
-			Session.Age = 8;
-			int rand = new Random().Next(10);
-			Session.Gender = rand <=5 ? Constants.Boy : Constants.Girl;
+			//Session.Age = 8;
+			//int rand = new Random().Next(10);
+			//Session.Gender = rand <=5 ? Constants.Boy : Constants.Girl;
 			//****
 			AbstractStart();
 
@@ -66,6 +66,18 @@ namespace Assets.STScripts
 			AbstractChoose(item);
 		}
 
+		public void OpenDoor()
+		{
+			Door.SetActive(false);
+			DoorOpen.SetActive(true);
+		}
+
+		public void CloseDoor()
+		{
+			DoorOpen.SetActive(false);
+			Door.SetActive(true);
+		}
+
 		public void Next()
 		{
 			AbstractNext("Transition2");
@@ -93,18 +105,6 @@ namespace Assets.STScripts
 			var t = Text.GetComponent<Text>();
 			t.text = DateTime.Today.Day + " " +
 			         CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(DateTime.Today.Month);
-		}
-
-		private void OpenDoor()
-		{
-			Door.SetActive(false);
-			DoorOpen.SetActive(true);
-		}
-
-		private void CloseDoor()
-		{
-			DoorOpen.SetActive(false);
-			Door.SetActive(true);
 		}
 			
 		private void Exit()

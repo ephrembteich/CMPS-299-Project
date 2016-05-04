@@ -22,7 +22,7 @@ public class MainScene : MonoBehaviour {
 		}
 	}
 
-	public void play(){
+	public void Play(){
 		//to retract the id of the child take the below param
 		//mainInputField.text
 		SceneManager.LoadScene("introLevel");

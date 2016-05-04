@@ -12,8 +12,8 @@ namespace Assets.STScripts
 		public Sprite ThirdImg;
 
 		void Start(){
-			Invoke ("getImg2", 4);
-			Invoke ("next", 7.5F);
+			Invoke ("GetImg2", 4);
+			Invoke ("Next", 7.5F);
 		}
 
 		void Update(){

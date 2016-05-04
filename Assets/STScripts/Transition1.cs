@@ -11,13 +11,13 @@ namespace Assets.STScripts
 		public Sprite SecondImg;
 		public Sprite ThirdImg;
 
-		private void Start()
+		void Start()
 		{
 			Invoke("GetImg2", 4);
 			Invoke("Next", 7.5F);
 		}
 			
-		private void Update(){
+		void Update(){
 			if (Input.GetMouseButtonDown (0) || Input.GetMouseButtonDown (1) || Input.GetMouseButtonDown (2)) {
 				Next ();
 			}
