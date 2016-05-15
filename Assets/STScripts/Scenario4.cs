@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Globalization;
 using System;
+using System.Collections.Generic;
 
 namespace Assets.STScripts
 {
@@ -13,22 +14,31 @@ namespace Assets.STScripts
 		public GameObject ChoiceLeave;
 		public GameObject Tray;
 		public GameObject Text;
+		public GameObject GoStew;
+		public GameObject GoPizza;
+		public GameObject GoSalad;
+		public GameObject GoSimpleSalad;
+		public GameObject GoMediumPizza;
+		public GameObject GoSmallPizza;
+		public GameObject GoMother;
+		public GameObject GoBoy;
+		public GameObject GoGirl;
 
 		public void Start(){
-			InvokeRepeating("TrayAnimation", 0, 0.6f);
 			SetCalendar();
+			AbstractStart();
 		}
-
-		public void Next(){
-			SceneManager.LoadScene("Transition5");
-		}
-
+			
 		public void Chosen(string item)
 		{
 			InvokeRepeating("Exit", 0, 0.6f);
 			AbstractChoose(item);
 		}
 
+		public void Next(){
+			AbstractNext("Transition5");
+		}
+			
 		public void OpenDoor(){
 			door.SetActive (false);
 			openDoor.SetActive (true);
@@ -39,6 +49,22 @@ namespace Assets.STScripts
 			door.SetActive (true);
 		}
 
+		protected override void InitMap()
+		{
+			Map = new Dictionary<string, GameObject>
+			{
+				{Constants.Boy, GoBoy},
+				{Constants.Girl, GoGirl},
+				{Constants.Mom, GoMother},
+				{Constants.SmallPizza, GoSmallPizza},
+				{Constants.MediumPizza, GoMediumPizza},
+				{Constants.SimpleSalad, GoSimpleSalad},
+				{Constants.Salad, GoSalad},
+				{Constants.Pizza, GoPizza},
+				{Constants.Stew, GoStew}
+			};
+		}
+
 		private void SetCalendar()
 		{
 			var t = Text.GetComponent<Text>();
@@ -46,18 +72,9 @@ namespace Assets.STScripts
 				CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(DateTime.Today.Month);
 		}
 
-		private void TrayAnimation(){
-			
-		}
-
 		private void Exit(){
 			ChoiceLeave.GetComponent<Button>().image.canvasRenderer.SetAlpha(1);
 			ChoiceLeave.GetComponent<Button>().image.CrossFadeAlpha(0.5f, 0.6f, false);
-		}
-
-		protected override void InitMap()
-		{
-			
 		}
 	}
 }
