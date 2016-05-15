@@ -21,9 +21,9 @@ namespace Assets
 		protected void TurnOnConfig()
 		{
 			var scene = Session.CurrentScene;
-			foreach (var fItem in scene.FoodItems)
-			{
-				Map[fItem].SetActive(true);
+
+			foreach (var fItem in scene.FoodItems) {
+				Map [fItem].SetActive (true);
 			}
 
 			if (scene.IsMom)

@@ -14,6 +14,8 @@ namespace Assets.STScripts
 		public GameObject GoManouche1;
 		public GameObject GoManouche2;
 		public GameObject GoManouche3;
+		public GameObject GoManoucheMedium;
+		public GameObject GoManoucheSmall;
 		public GameObject GoFriend;
 		public GameObject GoBoy;
 		public GameObject GoGirl;
@@ -79,6 +81,8 @@ namespace Assets.STScripts
 				{Constants.Manouche1, GoManouche1},
 				{Constants.Manouche2, GoManouche2},
 				{Constants.Manouche3, GoManouche3},
+				{Constants.ManoucheMedium, GoManoucheMedium},
+				{Constants.ManoucheSmall, GoManoucheSmall},
 				{Constants.Friend, GoFriend},
 				{Constants.CoverClosed, GoCoverClosed},
 				{Constants.CoverOpened, GoCoverOpened},

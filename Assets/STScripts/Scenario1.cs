@@ -16,13 +16,11 @@ namespace Assets.STScripts
 		public GameObject ChoiceLeave;
 		public GameObject Door;
 		public GameObject GoBoy;
-		public GameObject GoBread;
 		public GameObject GoCroissant;
 		public GameObject GoGirl;
-		public GameObject GoLabneh;
+		public GameObject GoLabnehWithVegetables;
 		public GameObject GoMediumSandwich;
 		public GameObject GoMother;
-		public GameObject GoOlive;
 		public GameObject GoSandwich;
 		public GameObject GoSmallSandwich;
 		public GameObject DoorOpen;
@@ -92,9 +90,7 @@ namespace Assets.STScripts
 				{Constants.Mom, GoMother},
 				{Constants.Croissant, GoCroissant},
 				{Constants.Sandwich, GoSandwich},
-				{Constants.Labneh, GoLabneh},
-				{Constants.Bread, GoBread},
-				{Constants.Olives, GoOlive},
+				{Constants.LabnehVegetables, GoLabnehWithVegetables},
 				{Constants.SmallSand, GoSmallSandwich},
 				{Constants.MediumSand, GoMediumSandwich}
 			};
