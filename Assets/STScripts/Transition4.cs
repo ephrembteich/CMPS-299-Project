@@ -7,11 +7,10 @@ namespace Assets.STScripts{
 		public GameObject Canvas;
 		public Image Image;
 		public Sprite SecondImg;
-		public Sprite ThirdImg;
 
 		private void Start(){
-			Invoke ("GetImg2", 4);
-			Invoke ("Next", 7.5F);
+			Invoke ("GetImg2", 3.5F);
+			Invoke ("Next", 10.5F);
 		}
 			
 		void Update(){

@@ -9,7 +9,6 @@ namespace Assets.STScripts
 		public GameObject Canvas;
 		public Image Image;
 		public Sprite SecondImg;
-		public Sprite ThirdImg;
 
 		void Start()
 		{
