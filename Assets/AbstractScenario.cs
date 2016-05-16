@@ -16,6 +16,7 @@ namespace Assets
 		{
 			InitMap();
 			TurnOnConfig();
+			ChangeName();
 		}
 
 		protected void TurnOnConfig()
@@ -34,9 +35,23 @@ namespace Assets
 			Map[Session.Gender].SetActive(true);
 		}
 
+		protected void ChangeName()
+		{
+			var scene = Session.CurrentScene;
+			//Debug.Log(scene.constVariable.Keys);
+			foreach (var constVar in scene.constVariable.Keys)
+			{
+				//Debug.Log("Old Name"+Map[constVar].name +" " + scene.constVariable[constVar].Name);
+				Map[constVar].transform.GetChild(0).name = scene.constVariable[constVar].Name;
+				//Debug.Log("New Name"+Map[constVar].name+"End");
+			}
+		}
+
+
+
 		protected void AbstractChoose(String item)
 		{
-			Session.CurrentScene.SelectedFoodItem = item;
+			Session.AddChoice(item);
 		}
 
 		protected void AbstractNext(String nextScene)

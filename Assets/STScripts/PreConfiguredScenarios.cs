@@ -39,48 +39,47 @@ namespace Assets.STScripts
 					var scene = new Scene("Breakfast Home");
 					scene.Place = "Kitchen";
 					scene.Time = "Morning";
-					scene.Variables.Add(new Variable("Convenience", "Croissant and Labneh Sandwich are on the table"));
-					scene.Variables.Add(new Variable("Food Type", "Labneh Sandwich, Croissant"));
-					scene.Variables.Add(new Variable("Pressure", "Mother is not in the kitchen"));
-					scene.Variables.Add(new Variable("Portion Size", "Same Portion Size"));
+					scene.Variables.Add(ServerVariablesConsts.Breakfast_Croissant);
+					scene.Variables.Add(ServerVariablesConsts.Breakfast_Sandwich_Table);
 					scene.FoodItems.Add(Constants.Croissant);
 					scene.FoodItems.Add(Constants.Sandwich);
+					scene.constVariable.Add(Constants.Croissant, ServerVariablesConsts.Breakfast_Croissant);
+					scene.constVariable.Add(Constants.Sandwich, ServerVariablesConsts.Breakfast_Sandwich_Table);
 					return scene;
 				case 2:
 					var scene2 = new Scene("Breakfast Home");
 					scene2.Place = "Kitchen";
 					scene2.Time = "Morning";
-					scene2.Variables.Add(new Variable("Convenience",
-						"Labneh Sandwich is on the table. Labneh sandwich with vegetables is in the fridge"));
-					scene2.Variables.Add(new Variable("Food Type", "Labneh Sandwich"));
-					scene2.Variables.Add(new Variable("Pressure", "Mother is not in the kitchen"));
-					scene2.Variables.Add(new Variable("Portion Size", "Same Portion Size"));
+					scene2.Variables.Add(ServerVariablesConsts.Breakfast_Sandwich_Table);
+					scene2.Variables.Add(ServerVariablesConsts.Breakfast_LabnehOlives_Fridge);
 					scene2.FoodItems.Add(Constants.Sandwich);
 					scene2.FoodItems.Add(Constants.LabnehVegetables);
+					scene2.constVariable.Add(Constants.Sandwich, ServerVariablesConsts.Breakfast_Sandwich_Table);
+					scene2.constVariable.Add(Constants.LabnehVegetables, ServerVariablesConsts.Breakfast_LabnehOlives_Fridge);
 					return scene2;
 
 				case 3:
 					var scene3 = new Scene("Breakfast Home");
 					scene3.Place = "Kitchen";
-					scene3.Time = "Morning";
-					scene3.Variables.Add(new Variable("Convenience", "Labneh sandwich is on the table"));
-					scene3.Variables.Add(new Variable("Food Type", "Labneh Sandwich"));
-					scene3.Variables.Add(new Variable("Pressure", "Mother is in the kitchen"));
-					scene3.Variables.Add(new Variable("Portion Size", "Same Portion Size"));
+					scene3.Variables.Add(ServerVariablesConsts.Breakfast_Sandwich_Table);
+					scene3.Variables.Add(ServerVariablesConsts.Breakfast_Mother);
 					scene3.FoodItems.Add(Constants.Sandwich);
 					scene3.FoodItems.Add(Constants.Mom);
+					scene3.constVariable.Add(Constants.Sandwich, ServerVariablesConsts.Breakfast_Sandwich_Table);
 					return scene3;
 				default:
 					var scene4 = new Scene("Breakfast Home");
 					scene4.Place = "Kitchen";
 					scene4.Time = "Morning";
-					scene4.Variables.Add(new Variable("Convenience", "Labneh sandwiches are on the table"));
-					scene4.Variables.Add(new Variable("Food Type", "Labneh Sandwich"));
-					scene4.Variables.Add(new Variable("Pressure", "Mother is not in the kitchen"));
-					scene4.Variables.Add(new Variable("Portion Size", "small, medium, large sandwich"));
+					scene4.Variables.Add(ServerVariablesConsts.Breakfast_Sandwich_Table);
+					scene4.Variables.Add(ServerVariablesConsts.Breakfast_SandwichSmall_Table);
+					scene4.Variables.Add(ServerVariablesConsts.Breakfast_SandwichMedium_Table);
 					scene4.FoodItems.Add(Constants.Sandwich);
 					scene4.FoodItems.Add(Constants.SmallSand);
 					scene4.FoodItems.Add(Constants.MediumSand);
+					scene4.constVariable.Add(Constants.Sandwich, ServerVariablesConsts.Breakfast_Sandwich_Table);
+					scene4.constVariable.Add(Constants.SmallSand, ServerVariablesConsts.Breakfast_SandwichSmall_Table);
+					scene4.constVariable.Add(Constants.MediumSand, ServerVariablesConsts.Breakfast_SandwichMedium_Table);
 					return scene4;
 			}
 		}
@@ -94,24 +93,25 @@ namespace Assets.STScripts
 				var scene = new Scene("Market Before School");
 				scene.Place = "Market";
 				scene.Time = "Morning";
-				scene.Variables.Add(new Variable("Convenience", "Food item inside a protecting cover or on the table"));
-				scene.Variables.Add(new Variable("Food Type", "Manouche"));
-				scene.Variables.Add(new Variable("Peer Pressure", "No friends are there"));
-				scene.Variables.Add(new Variable("Item Price", "Same Price"));
+				//scene.Variables.Add(new Variable("Convenience", "Food item inside a protecting cover or on the table"));
+				//scene.Variables.Add(new Variable("Food Type", "Manouche"));
+				//scene.Variables.Add(new Variable("Peer Pressure", "No friends are there"));
+				//scene.Variables.Add(new Variable("Item Price", "Same Price"));
 				scene.FoodItems.Add(Constants.Manouche1);
 				scene.FoodItems.Add(Constants.Manouche2);
 				scene.FoodItems.Add(Constants.CoverClosed);
 				scene.FoodItems.Add(Constants.PriceTag3);
 				scene.FoodItems.Add(Constants.PriceTag4);
+				//Constants.Manouche1 -> variable
 				return scene;
 			case 2:
 				var scene2 = new Scene("Market Before School");
 				scene2.Place = "Market";
 				scene2.Time = "Morning";
-				scene2.Variables.Add(new Variable("Convenience", "Food is on the table outside the shop"));
-				scene2.Variables.Add(new Variable("Food Type", "Manouche Banana Custard Chips"));
-				scene2.Variables.Add(new Variable("Peer Pressure", "No friends are there"));
-				scene2.Variables.Add(new Variable("Item Price", "Same Price"));
+				//scene2.Variables.Add(new Variable("Convenience", "Food is on the table outside the shop"));
+				//scene2.Variables.Add(new Variable("Food Type", "Manouche Banana Custard Chips"));
+				//scene2.Variables.Add(new Variable("Peer Pressure", "No friends are there"));
+				//scene2.Variables.Add(new Variable("Item Price", "Same Price"));
 				scene2.FoodItems.Add(Constants.PriceTag1);
 				scene2.FoodItems.Add(Constants.PriceTag2);
 				scene2.FoodItems.Add(Constants.PriceTag3);
@@ -125,10 +125,10 @@ namespace Assets.STScripts
 				var scene3 = new Scene("Market Before School");
 				scene3.Place = "Market";
 				scene3.Time = "Morning";
-				scene3.Variables.Add(new Variable("Convenience", "Food is on the table outside the shop"));
-				scene3.Variables.Add(new Variable("Food Type", "Manouche"));
-				scene3.Variables.Add(new Variable("Peer Pressure", "Friend is buying a manouche"));
-				scene3.Variables.Add(new Variable("Item Price", "Same Price"));
+				//scene3.Variables.Add(new Variable("Convenience", "Food is on the table outside the shop"));
+				//scene3.Variables.Add(new Variable("Food Type", "Manouche"));
+				//scene3.Variables.Add(new Variable("Peer Pressure", "Friend is buying a manouche"));
+				//scene3.Variables.Add(new Variable("Item Price", "Same Price"));
 				scene3.FoodItems.Add(Constants.Manouche1);
 				scene3.FoodItems.Add(Constants.Manouche2);
 				scene3.FoodItems.Add(Constants.Manouche3);
@@ -153,10 +153,10 @@ namespace Assets.STScripts
 				var scene5 = new Scene("Market Before School");
 				scene5.Place = "Market";
 				scene5.Time = "Morning";
-				scene5.Variables.Add(new Variable("Convenience", "Food is on the table outside the shop"));
-				scene5.Variables.Add(new Variable("Food Type", "Manouche"));
-				scene5.Variables.Add(new Variable("Peer Pressure", "No friends are there"));
-				scene5.Variables.Add(new Variable("Item Price", "100LL, 200LL, 500LL"));
+				//scene5.Variables.Add(new Variable("Convenience", "Food is on the table outside the shop"));
+				//scene5.Variables.Add(new Variable("Food Type", "Manouche"));
+				//scene5.Variables.Add(new Variable("Peer Pressure", "No friends are there"));
+				//scene5.Variables.Add(new Variable("Item Price", "100LL, 200LL, 500LL"));
 				scene5.FoodItems.Add(Constants.Manouche1);
 				scene5.FoodItems.Add(Constants.Manouche2);
 				scene5.FoodItems.Add(Constants.Manouche3);

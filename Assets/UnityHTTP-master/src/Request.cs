@@ -112,6 +112,14 @@ namespace Assets.src
 			AddHeader("Content-Type", "application/json");
 		}
 
+		public Request(string method, string uri, String json)
+		{
+			this.Method = method;
+			this.Uri = new Uri(uri);
+			ByteStream = new MemoryStream(Encoding.UTF8.GetBytes(json));
+			AddHeader("Content-Type", "application/json");
+		}
+
 		public string Text
 		{
 			set { ByteStream = new MemoryStream(Encoding.UTF8.GetBytes(value)); }

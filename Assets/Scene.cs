@@ -10,17 +10,19 @@ namespace Assets
 		public Scene(String sceneName)
 		{
 			this.SceneName = sceneName;
-			Variables = new List<Variable>();
+			Variables = new List<ServerVariable>();
 			FoodItems = new List<String>();
+			constVariable = new Dictionary<String, ServerVariable>();
 		}
 
 		public String SceneName { get; set; }
 		public String Place { get; set; }
 		public String Time { get; set; }
-		public List<Variable> Variables { get; set; }
+		public List<ServerVariable> Variables { get; set; }
 		public List<String> FoodItems { get; set; }
 		public bool IsMom { get; set; }
 		public String SelectedFoodItem { get; set; }
+		public Dictionary<String, ServerVariable>  constVariable { get; set; }
 
 		public String GetResult()
 		{

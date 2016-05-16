@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace Assets
 {
-	public class Feedback : MonoBehaviour
+	public class Feedback : AbstractScenario
 	{
 		string [] does = {"Junk food is bad for your health", "Candy and sweets damage your teeth",
 			"Soft drinks lead to sugar overload", "Chips and fried potato cause obesity"};
@@ -17,11 +17,17 @@ namespace Assets
 		void Start(){
 			rG = new System.Random ();
 			t.text = does[rG.Next(0, 4)]+"\n\n"+donts[rG.Next(0, 4)];
+			//Debug.Log(JsonUtility.ToJson(Session.GetServerVariable()));
 		}
 
 		public void Exit()
 		{
 			Application.Quit();
+		}
+
+		protected override void InitMap()
+		{
+			throw new System.NotImplementedException();
 		}
 	}
 }
