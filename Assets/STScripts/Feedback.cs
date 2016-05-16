@@ -17,6 +17,7 @@ namespace Assets
 		void Start(){
 			rG = new System.Random ();
 			t.text = does[rG.Next(0, 4)]+"\n\n"+donts[rG.Next(0, 4)];
+			PublishToServer.Post(Session.GetServerVariable());
 			//Debug.Log(JsonUtility.ToJson(Session.GetServerVariable()));
 		}
 
