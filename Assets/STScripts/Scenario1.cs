@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using Assets.src;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Random = System.Random;
 
 namespace Assets.STScripts
 {
 	public class Scenario1 : AbstractScenario, IDrop
 	{
+		private float _savedTimeScale;
 		public GameObject Canvas;
 		public GameObject ChoiceLeave;
 		public GameObject Door;
+		public GameObject DoorOpen;
 		public GameObject GoBoy;
 		public GameObject GoCroissant;
 		public GameObject GoGirl;
@@ -23,9 +22,13 @@ namespace Assets.STScripts
 		public GameObject GoMother;
 		public GameObject GoSandwich;
 		public GameObject GoSmallSandwich;
-		public GameObject DoorOpen;
-		private float _savedTimeScale;
 		public GameObject Text;
+
+		public void Chosen(string item)
+		{
+			InvokeRepeating("Exit", 0, 0.6f);
+			AbstractChoose(item);
+		}
 
 		// Use this for initialization
 		private void Start()
@@ -38,30 +41,10 @@ namespace Assets.STScripts
 			//****
 			AbstractStart();
 
-			//Debug.Log("SSSS");
-			//var someRequest = new Request("get", "http://jsonplaceholder.typicode.com/posts");
-			//someRequest.Send(request =>
-			//{
-				// parse some JSON, for example:
-				//Debug.Log(request.response.Text);
-				//var filePath = @"Game_Result" /*+ @System.DateTime.Now.ToString()*/+ ".txt";
-				//string delimiter = ",";
-				//File.WriteAllText(filePath, request.Response.Text);
-			//});
-
-			//Save s = new Save();
-			//var ass = s.SomeRoutine();
-			//Debug.Log("EEEE" + ass);
 			DoorOpen.SetActive(false);
 
 			//Debug.Log (session.Age +" " + session.Gender);
 			SetCalendar();
-		}
-
-		public void Chosen(string item)
-		{
-			InvokeRepeating("Exit", 0, 0.6f);
-			AbstractChoose(item);
 		}
 
 		public void OpenDoor()
@@ -80,7 +63,7 @@ namespace Assets.STScripts
 		{
 			AbstractNext("Transition2");
 		}
-			
+
 		protected override void InitMap()
 		{
 			Map = new Dictionary<string, GameObject>
@@ -102,7 +85,7 @@ namespace Assets.STScripts
 			t.text = DateTime.Today.Day + " " +
 			         CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(DateTime.Today.Month);
 		}
-			
+
 		private void Exit()
 		{
 			ChoiceLeave.GetComponent<Button>().image.canvasRenderer.SetAlpha(1);
