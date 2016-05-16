@@ -12,8 +12,8 @@ namespace Assets.STScripts
 
 		void Start()
 		{
-			Invoke("GetImg2", 4);
-			Invoke("Next", 9.5F);
+			Invoke("GetImg2", 3);
+			Invoke("Next", 8.8F);
 		}
 			
 		void Update(){

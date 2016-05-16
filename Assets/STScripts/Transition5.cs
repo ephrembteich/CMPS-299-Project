@@ -10,7 +10,7 @@ namespace Assets.STScripts{
 
 		private void Start(){
 			Invoke ("GetImg2", 3.2F);
-			Invoke ("Next", 8.5F);
+			Invoke ("Next", 8.2F);
 		}
 
 		void Update(){
