@@ -9,10 +9,9 @@ namespace Assets.STScripts
 		public GameObject Canvas;
 		public Image Image;
 		public Sprite SecondImg;
-		public Sprite ThirdImg;
 
 		void Start(){
-			Invoke ("GetImg2", 4);
+			Invoke ("GetImg2", 3F);
 			Invoke ("Next", 7.5F);
 		}
 
