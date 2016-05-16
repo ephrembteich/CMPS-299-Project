@@ -19,6 +19,12 @@ namespace Assets
 
 		public List<ServerVariable> Variables;
 
+		public ServerGameSession()
+		{
+			Choices = new List<ServerVariable>();
+			Variables = new List<ServerVariable>();
+		}
+
 		public ServerGameSession(String playerId, String gender, int age)
 		{
 			PlayerId = playerId;

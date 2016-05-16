@@ -61,6 +61,7 @@ namespace Assets.STScripts
 
 		public void Next()
 		{
+			PublishToServer.Post(Session.GetServerVariable());
 			AbstractNext("Transition2");
 		}
 

@@ -13,6 +13,7 @@ namespace Assets
 		public CookieAccessInfo C;
 		public LinkedList<String> Results;
 		private PreConfiguredScenarios _generator;
+		private ServerGameSession _serverResult;
 
 		private GameSession()
 		{
@@ -20,10 +21,16 @@ namespace Assets
 			Results = new LinkedList<String>();
 			Scenes = _generator.GenerateScenes();
 			CurrentScene = Scenes.ElementAt(CurrentLevel);
+			_serverResult = new ServerGameSession();
+			foreach (var scene in Scenes)
+			{
+				_serverResult.Variables.AddRange(scene.Variables);
+			}
 		}
 
 		public int Age { get; set; }
 		public String Gender { get; set; }
+		public String PlayerId { get; set; }
 		public List<Scene> Scenes { get; set; }
 		public Scene CurrentScene { get; set; }
 		public int CurrentLevel { get; set; }
@@ -37,6 +44,26 @@ namespace Assets
 		{
 			CurrentLevel++;
 			CurrentScene = Scenes.ElementAt(CurrentLevel);
+		}
+
+		public void AddChoice(String variableName)
+		{
+			foreach (var variable in _serverResult.Variables)
+			{
+				if (variable.Name.Equals(variableName))
+				{
+					_serverResult.Choices.Add(variable);
+					break;
+				}
+			}
+		}
+
+		public ServerGameSession GetServerVariable()
+		{
+			_serverResult.Age = Age;
+			_serverResult.Gender = Gender;
+			_serverResult.PlayerId = PlayerId;
+			return _serverResult;
 		}
 
 		public static GameSession GetSession()
